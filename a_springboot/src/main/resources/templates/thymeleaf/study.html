@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/def_layout">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<h2>thymeleaf 학습</h2>
+	
+		<pre>1. 변수 선언하고 출력하기
+		변수 선언 :  th:with
+		변수 출력 : ${...}
+		</pre>
+		<span th:with="var='ex) 내가 만든 변수 입니다.'" th:text="${var}"></span>
+		
+		<hr>
+		
+		<pre>2. *{...} 선택 변수 표현식 
+		th:object에 저장된 객체의 속성에 접근할 때 선택 변수 표현식을 사용해 속성값 만으로 해당 값을 사용할 수 있다.
+		th:utext : escape 처리를 하지 않고 해당 요소의 텍스트 값을 지정한다. 
+		</pre>
+		<span th:object="${score}" th:utext="'자바 : ' + *{java} + '<br>html : ' + *{html}"></span>
+		
+		<hr>
+		
+		<pre>3. @{...} 링크 표현식
+		url뒤에 괄호를 작성해 파라미터를 추가할 수 있다. ex) @{https://www.naver.com(test=100,name=hmd)}	
+		</pre>
+		<a th:href="@{https://www.naver.com(test=100,name=hmd)}">네이버로 이동</a>
+		
+		<hr>
+		
+		<pre>4. ~{...}Fragment 표현식</pre>
+		<th:block th:insert="~{fragments/frag_Example}"/>
+	</div>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</body>
+</html>
