@@ -7,12 +7,30 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
+//WebSecurityConfigurerAdapter : WebSecurityConfigurer 인스턴스를 생성하기 위한 추상클래스
+//메서드를 재지정하여 사용자가 보안설정을 지정한다. 그 외의 부분은 AbstractHttpConfiger의 조회 결과를 자동으로 적용
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-//WebSecurityConfigurerAdapter : 사용자가 자체적으로 보안 구성을 하고 싶을 때 사용.
-//								해당 클래스를 작성하면 기본 자동 구성이 비활성화 된다.
-//우리가 해볼 것 : 회원가입 / 로그인 / 권한관리
+
+	//우리가 해볼 것 : 회원가입 / 로그인 / 권한관리
 	@Override
 	public void configure(HttpSecurity http) throws Exception{
-		//http.authorizeRequests().anyRequest().permitAll();
+		http.authorizeRequests().anyRequest().permitAll();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
