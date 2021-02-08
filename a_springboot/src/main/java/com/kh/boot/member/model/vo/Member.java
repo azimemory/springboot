@@ -9,8 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity(name="tb_member")
 @DynamicInsert
 @DynamicUpdate
-public class Member {
-	
+public class Member{
 	@Id
 	private String userId;
 	private String password;
@@ -91,17 +90,6 @@ public class Member {
 				+ ", email=" + email + ", regDate=" + regDate + ", rentableDate=" + rentableDate + ", isLeave="
 				+ isLeave + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 }

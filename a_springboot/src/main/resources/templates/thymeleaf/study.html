@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout/def_layout">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body th:with="var='ex) <i>내가 제일 좋아하는 언어 점수 : </i>'">
-	<th:block th:insert="~{fragments/header.html}"/>
+	<th:block th:insert="~{fragments/thyme/header.html}"/>
 	<h2>thymeleaf 학습</h2>
 	
 	<h3>1. 변수 선언하고 출력하기</h3>
@@ -55,8 +52,8 @@
 	th:replace : 해당 태그를 fragment로 대체
 	</pre>
 	<!-- 개발자모드에서 확인 -->
-	<div th:insert="~{fragments/frag_Example}"></div>
-	<div th:replace="~{fragments/frag_Example :: headerFrg}"></div>
+	<div th:insert="~{fragments/thyme/frag_Example}"></div>
+	<div th:replace="~{fragments/thyme/frag_Example :: headerFrg}"></div>
 	
 	<hr>
 	
@@ -88,7 +85,7 @@
 	<div style="background-color:yellow" th:attrappend="style='; color:red'">th:attr</div>
 	<div style="background-color:yellow" th:attrprepend="style='color:blue;'">th:attr</div>
 	
-	<th:block th:replace="~{fragments/footer.html}"/>
+	<th:block th:replace="~{fragments/thyme/footer.html}"/>
 	
 </body>
 </html>
