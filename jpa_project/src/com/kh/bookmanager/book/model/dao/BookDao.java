@@ -1,51 +1,43 @@
 package com.kh.bookmanager.book.model.dao;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import com.kh.bookmanager.book.model.vo.Book;
 
 public class BookDao {
 	
-	public List<Book> selectAllBooks() throws SQLException{		
-		Book book = null;
-		List<Book> bookList = new ArrayList<Book>();		
-				
+	public List<Book> selectAllBooks(Session session){		
+		List<Book> bookList = session.createQuery("from Book").list();		
 		return bookList;
 	}
 	
-	public List<Book> selectBookOrderByRank() throws SQLException {		
-		Book book = null;
-		List<Book> bookList = new ArrayList<Book>();
-		
-		return bookList;
+	public List<Book> selectBookOrderByRank(Session session) {		
+		Query query  = session.createQuery("from Book b order by b.rentCnt");
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+		return query.list();
 	}
 	
-	public Book selectBookByTitle( String title) throws SQLException {
-		Book book = null;
-		
-		return book;
+	public Book selectBookByTitle(Session session,String title) {
+		Query query =  session.createQuery("from Book b where b.title = :title",Book.class);
+		query.setParameter("title", title);
+		return (Book)query.getSingleResult();
 	}
 	
-	public int insertBook( Book book) throws SQLException {
-		int res = 0;
-		
-		return res;
+	public void insertBook(Session session, Book book) {
+		session.save(book);
 	}
 
-	public int updateBook( Book book) throws SQLException {
-		int res = 0;
-			
-		return res;
+	public void updateBook(Session session, Book book) {
+		Book entity = session.get(Book.class, book.getBkIdx());
+		session.update(entity);
 	}
 	
-	public int deleteBookByBIdx( int bIdx) throws SQLException {
-		int res = 0;
-		
-		return res;
+	public void deleteBookByBkIdx(Session session, String bkIdx) {
+		Book entity = session.get(Book.class, bkIdx);
+		session.delete(entity);
 	}
 }

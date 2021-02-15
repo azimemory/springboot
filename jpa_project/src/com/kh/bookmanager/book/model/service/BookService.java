@@ -2,60 +2,89 @@ package com.kh.bookmanager.book.model.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.kh.bookmanager.book.model.dao.BookDao;
 import com.kh.bookmanager.book.model.vo.Book;
 
 public class BookService {
-	
 	BookDao bookDao = new BookDao();
-	public List<Book> selectAllBooks(){
-		List<Book> bookList = null;
-		
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_project");
 	
-		
-		return bookList;
+	public List<Book> selectAllBooks(){
+		try(Session session = getSession()){
+			return bookDao.selectAllBooks(session);
+		}
 	}
 	
 	public List<Book> selectBookOrderByRank() {
-		List<Book> bookList = new ArrayList<Book>();
-		
-		
-		
-		return bookList;
+		try(Session session = getSession()){
+			return bookDao.selectBookOrderByRank(session);
+		}
 	}
 	
 	public Book selectBookByTitle(String title) {
-		Book book = null;
-	
-		return book;
+		try(Session session = getSession()){
+			return bookDao.selectBookByTitle(session, title);
+		}
 	}
 	
-	public int insertBook(Book book) {
+	public boolean insertBook(Book book) {
+		boolean res = false;
+		Transaction tx = null;
 		
+		try(Session session = getSession()){
+			tx = session.getTransaction();
+			tx.begin();
+			bookDao.insertBook(session, book);
+			tx.commit();
+			res = true;
+		}catch (Exception e) {
+			tx.rollback();
+		}
 		
-		int res = 0;
-		
-		
-	
 		return res;
 	}
 
-	public int updateBook(Book book) {
-		
-		
-		int res = 0;
-		
-		
-		
+	public boolean updateBook(Book book) {
+		boolean res = false;
+		Transaction tx = null;
+		try(Session session = getSession()){
+			tx = session.getTransaction();
+			tx.begin();
+			bookDao.updateBook(session, book);
+			tx.commit();
+			res = true;
+		}catch (Exception e) {
+			tx.rollback();
+		}
 		return res;
 	}
 	
-	public int deleteBookByBIdx(int bIdx){
-		
-		
-		int res = 0;
-	
-		
+	public boolean deleteBookByBkIdx(String bkIdx){
+		boolean res = false;
+		Transaction tx = null;
+		try(Session session = getSession()){
+			tx = session.getTransaction();
+			tx.begin();
+			bookDao.deleteBookByBkIdx(session, bkIdx);
+			tx.commit();
+			res = true;
+		}catch (Exception e) {
+			tx.rollback();
+		}
 		return res;
+	}
+	
+	private Session getSession() {
+		EntityManager em = emf.createEntityManager();
+		Session session = em.unwrap(Session.class);
+		return session;
 	}
 }

@@ -16,28 +16,36 @@ public class MemberDao {
 	public MemberDao() {}
 	
 	public Member selectMemberById(EntityManager em, String userId){
-		return null;
+		Member member = em.find(Member.class, userId);
+		return member;
 	}
  		
-	public List<Member> selectMemberList(EntityManager em){		
-		return null;
+	public List<Member> selectMemberList(EntityManager em){	
+		String jpql = "from Member";
+		//String fetchJoin = "select m from Member m join fetch m.rentMasters";
+		return em.createQuery(jpql).getResultList();
 	}
 	
-	public boolean insertMember(EntityManager em, Member member){
-		return false;
+	public void insertMember(EntityManager em, Member member){
+		em.persist(member); //값이 null인 필드값도 추가되어 default 제약조건이 동작하지 않는다.
 	}
 	
-	public boolean updateMember(EntityManager em, Member member){
-		return false;
+	public void updateMember(EntityManager em, Member member){
+		Member entity = em.find(Member.class, member.getUserId());
+		entity.setPassword(member.getPassword());
 	}
 	
-	public boolean deleteMember(EntityManager em, String userId){
-		return false;
+	public void deleteMember(EntityManager em, String userId){
+		Member entity = em.find(Member.class, userId);
+		em.remove(entity);
 	}
 	
 	public List<Member> selectMemberByRegdate(EntityManager em, Date begin, Date end){
 		List<Member> memberList = new ArrayList<>();
-		
+		Query query = em.createQuery("select m from Member m where m.regDate between :begin and :end");
+		query.setParameter("begin", begin);
+		query.setParameter("end", end);
+		memberList = query.getResultList();
 		return memberList;
 	}
 }

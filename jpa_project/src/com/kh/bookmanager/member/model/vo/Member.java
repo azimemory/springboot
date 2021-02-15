@@ -3,6 +3,9 @@ package com.kh.bookmanager.member.model.vo;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.kh.bookmanager.rent.model.vo.RentMaster;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -15,6 +18,8 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Member.findAll", query="SELECT m FROM Member m")
+@DynamicInsert
+@DynamicUpdate
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +32,7 @@ public class Member implements Serializable {
 	private String grade;
 
 	@Column(name="IS_LEAVE")
-	private BigDecimal isLeave;
+	private int isLeave;
 
 	private String password;
 
@@ -40,12 +45,14 @@ public class Member implements Serializable {
 	private Date rentableDate;
 
 	private String tell;
-
-	//bi-directional many-to-one association to RentMaster
-	@OneToMany(mappedBy="member")
+	
+	//FetchType.EAGER : 즉시로딩 사용, Member Entity를 꾸리기 위한 모든 정보를 즉시 로딩한다. 기본적으로 지연로딩이 설정되어 있다. 
+	//지연로딩을 사용하면 TB_MEMBER 테이블에서 회원정보만 가져온 다음 주문 정보가 필요한 시점에 rentMasters 쿼리를 날린다. 
+	@OneToMany(mappedBy="member", fetch = FetchType.EAGER)
 	private List<RentMaster> rentMasters;
 
 	public Member() {
+		
 	}
 
 	public String getUserId() {
@@ -72,11 +79,11 @@ public class Member implements Serializable {
 		this.grade = grade;
 	}
 
-	public BigDecimal getIsLeave() {
+	public int getIsLeave() {
 		return this.isLeave;
 	}
 
-	public void setIsLeave(BigDecimal isLeave) {
+	public void setIsLeave(int isLeave) {
 		this.isLeave = isLeave;
 	}
 
@@ -131,4 +138,13 @@ public class Member implements Serializable {
 		rentMaster.setMember(null);
 		return rentMaster;
 	}
+
+	@Override
+	public String toString() {
+		return "Member [userId=" + userId + ", email=" + email + ", grade=" + grade + ", isLeave=" + isLeave
+				+ ", password=" + password + ", regDate=" + regDate + ", rentableDate=" + rentableDate + ", tell="
+				+ tell + ", rentMasters=" + rentMasters + "]";
+	}
+	
+	
 }

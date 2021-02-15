@@ -35,7 +35,7 @@ public class Book implements Serializable {
 	private Date regDate;
 
 	@Column(name="RENT_CNT")
-	private BigDecimal rentCnt;
+	private int rentCnt;
 
 	private String title;
 
@@ -98,11 +98,11 @@ public class Book implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public BigDecimal getRentCnt() {
+	public int getRentCnt() {
 		return this.rentCnt;
 	}
 
-	public void setRentCnt(BigDecimal rentCnt) {
+	public void setRentCnt(int rentCnt) {
 		this.rentCnt = rentCnt;
 	}
 
@@ -114,4 +114,13 @@ public class Book implements Serializable {
 		this.title = title;
 	}
 
+	@Override
+	public String toString() {
+		return "Book [bkIdx=" + bkIdx + ", author=" + author + ", bookAmt=" + bookAmt + ", category=" + category
+				+ ", info=" + info + ", isbn=" + isbn + ", regDate=" + regDate + ", rentCnt=" + rentCnt + ", title="
+				+ title + "]";
+	}
+
+	
+	
 }

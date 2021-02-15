@@ -15,40 +15,27 @@ public class BookController {
 	}
 	
 	public List<Book> searchBooksWithRank(){
-		List<Book> bookList = bookService.selectAllBooks();
+		List<Book> bookList = bookService.selectBookOrderByRank();
+		
 		return bookList;
 	}
 	
 	public Book searchBookByTitle(String title) {
 		Book book = bookService.selectBookByTitle(title);
+		
 		return book;
 	}
 	
 	public boolean registBook(Book book) {
-		int res = bookService.insertBook(book);
-		if(res > 0) {
-			return true;
-		}else {
-			return false;
-		}
+		return bookService.insertBook(book);
 	}
 	
 	public boolean modifyBook(Book book) {
-		int res = bookService.updateBook(book);
-		if(res > 0) {
-			return true;
-		}else {
-			return false;
-		}
+		return bookService.updateBook(book);
 	}
 	
-	public boolean deleteBook(int bIdx) {
-		int res = bookService.deleteBookByBIdx(bIdx);
-		if(res > 0) {
-			return true;
-		}else {
-			return false;
-		}
+	public boolean deleteBook(String bkIdx) {
+		return bookService.deleteBookByBkIdx(bkIdx);
 	}
 
 }

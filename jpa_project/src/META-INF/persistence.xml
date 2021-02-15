@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-	<persistence-unit name="z_jpa_project" transaction-type="RESOURCE_LOCAL">
+<persistence version="2.2" 
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="jpa_project" transaction-type="RESOURCE_LOCAL">
 		<class>com.kh.bookmanager.book.model.vo.Book</class>
 		<class>com.kh.bookmanager.member.model.vo.Member</class>
 		<class>com.kh.bookmanager.rent.model.vo.RentBook</class>
 		<class>com.kh.bookmanager.rent.model.vo.RentMaster</class>
 		<properties>
-			<property name="eclipselink.logging.level" value="INFO" />
-			<property name="eclipselink.logging.parameters" value="true" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
 			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
 			<property name="javax.persistence.jdbc.user" value="jpa"/>
 			<property name="javax.persistence.jdbc.password" value="1234"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.format_sql" value="true"/>
 		</properties>
 	</persistence-unit>
 </persistence>
