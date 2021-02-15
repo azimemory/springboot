@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.kh.bookmanager.member.model.vo.Member;
 
@@ -14,32 +15,27 @@ public class MemberDao {
 
 	public MemberDao() {}
 	
-	public Member selectMemberById( String userId){
-		Member member = null;		
-		return member;
+	public Member selectMemberById(EntityManager em, String userId){
+		return null;
 	}
  		
-	public ArrayList<Member> selectMemberList(){		
-		ArrayList<Member> memberList = new ArrayList<Member>();		
-		return memberList;
+	public List<Member> selectMemberList(EntityManager em){		
+		return null;
 	}
 	
-	public int insertMember( Member member){
-		int res = 0;
-		return res;
+	public boolean insertMember(EntityManager em, Member member){
+		return false;
 	}
 	
-	public int updateMember( Member member){
-		int res = 0;		
-		return res;
+	public boolean updateMember(EntityManager em, Member member){
+		return false;
 	}
 	
-	public int deleteMember( String userId){
-		int res = 0;		
-		return res;
+	public boolean deleteMember(EntityManager em, String userId){
+		return false;
 	}
 	
-	public List<Member> selectMemberByRegdate( Date begin, Date end){
+	public List<Member> selectMemberByRegdate(EntityManager em, Date begin, Date end){
 		List<Member> memberList = new ArrayList<>();
 		
 		return memberList;

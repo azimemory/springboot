@@ -25,12 +25,12 @@ public class MemberMenu {
 			System.out.print("번호 입력 : ");
 			
 			switch(sc.nextInt()) {
-				case 1: ArrayList<Member> memberList = memberController.searchAllMember();
+				case 1: List<Member> memberList = memberController.searchAllMember();
 						for (Member member : memberList) {
 							System.out.println(member);
 						 }
 					break;
-				case 2: if(memberController.join(join()) > 0) {
+				case 2: if(memberController.join(join())) {
 							System.out.println("회원 추가 성공");
 						}else {
 							System.out.println("회원 추가 실패");
@@ -44,9 +44,8 @@ public class MemberMenu {
 					
 					System.out.print("변경할 비밀번호 : ");
 					member.setPassword(sc.next());
-					int res = memberController.modify(member);
 					
-					if(res > 0) {
+					if(memberController.modify(member)) {
 						System.out.println("암호 수정이 성공적으로 완료되었습니다.");
 					}else {
 						System.out.println("존재하지 않는 사용자입니다.");
@@ -56,19 +55,12 @@ public class MemberMenu {
 				case 4: 
 					System.out.print("탈퇴 시킬 회원의 아이디 입력 : ");
 					String userId = sc.next();
-					res = memberController.delete(userId);
 					
-					if(res > 0) {
+					if(memberController.delete(userId)) {
 						System.out.println("회원탈퇴 처리가 완료되었습니다.");
 					}else {
 						System.out.println("존재하지 않는 사용자 입니다.");
 					}
-					
-					
-					//TB_MEMBER 테이블의 IS_LEAVE 컬럼의 값을 1로 변경하여 탈퇴처리
-					//로그인할 때 IS_LEAVE 컬럼의 값이 1이라면 조회되지 않도록
-					//조건절 변경
-					//DAO : updateMemberToLeave() 메서드 추가;
 					
 					break;
 					

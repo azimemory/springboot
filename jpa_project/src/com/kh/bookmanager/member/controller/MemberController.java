@@ -15,19 +15,19 @@ public class MemberController {
 		return memberService.selectMemberById(userId);
 	}
  		
-	public ArrayList<Member> searchAllMember(){
+	public List<Member> searchAllMember(){
 		return memberService.selectMemberList();
 	}
 	
-	public int join(Member member) {
+	public boolean join(Member member) {
 		return memberService.insertMember(member);
 	}
 
-	public int modify(Member member) {
+	public boolean modify(Member member) {
 		return memberService.updateMember(member);
 	}
 	
-	public int delete(String userId){
+	public boolean delete(String userId){
 		return memberService.deleteMember(userId);
 	}
 	

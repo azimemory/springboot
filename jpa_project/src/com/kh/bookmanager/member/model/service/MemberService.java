@@ -23,34 +23,40 @@ public class MemberService {
 	MemberDao memberDao = new MemberDao();
 	
 	public Member selectMemberById(String userId){	
-		Member member = memberDao.selectMemberById( userId);
+		EntityManager em = emf.createEntityManager();
+		Member member = memberDao.selectMemberById(em, userId);
 		return member;
 	}
 	
 	public List<Member> selectMemberByRegdate(Date begin, Date end){
-		List<Member> memberList = memberDao.selectMemberByRegdate( begin, end);
+		EntityManager em = emf.createEntityManager();
+		List<Member> memberList = memberDao.selectMemberByRegdate(em, begin, end);
 		return memberList;
 	}
  		
-	public ArrayList<Member> selectMemberList(){
-		ArrayList<Member> memberList = memberDao.selectMemberList();
+	public List<Member> selectMemberList(){
+		EntityManager em = emf.createEntityManager();
+		List<Member> memberList = memberDao.selectMemberList(em);
 		return memberList;
 	}
 	
-	public int insertMember(Member member){
+	public boolean insertMember(Member member){
+		EntityManager em = emf.createEntityManager();
 		//Transaction관리를 Service단에서 처리하기 위해 ection을 
 		//Service의 메서드에서 생성
-		int res = 0;
+		boolean res = false;
 		return res;
 	}
 	
-	public int updateMember(Member member){
-		int res = 0;
+	public boolean updateMember(Member member){
+		EntityManager em = emf.createEntityManager();
+		boolean res = false;
 		return res;
 	}
 	
-	public int deleteMember(String userId){
-		int res = 0;
+	public boolean deleteMember(String userId){
+		EntityManager em = emf.createEntityManager();
+		boolean res = false;
 		return res;
 	}
 }
