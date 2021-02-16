@@ -46,6 +46,7 @@ public class BookService {
 			tx.commit();
 			res = true;
 		}catch (Exception e) {
+			e.printStackTrace();
 			tx.rollback();
 		}
 		
@@ -62,6 +63,7 @@ public class BookService {
 			tx.commit();
 			res = true;
 		}catch (Exception e) {
+			e.printStackTrace();
 			tx.rollback();
 		}
 		return res;
@@ -77,6 +79,7 @@ public class BookService {
 			tx.commit();
 			res = true;
 		}catch (Exception e) {
+			e.printStackTrace();
 			tx.rollback();
 		}
 		return res;

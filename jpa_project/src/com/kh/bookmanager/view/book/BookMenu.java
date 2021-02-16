@@ -50,9 +50,9 @@ public class BookMenu {
 				book.setInfo(sc.nextLine());
 				
 				if(bookController.modifyBook(book)) {
-					System.out.println("도서 추가 성공");
+					System.out.println("도서 수정 성공");
 				}else {
-					System.out.println("도서 추가 실패");
+					System.out.println("도서 수정 실패");
 				}
 				break;
 			case 4:
@@ -117,13 +117,13 @@ public class BookMenu {
 		book.setTitle(sc.nextLine());
 		
 		System.out.print("작가 : " );
-		book.setAuthor(sc.next());
+		book.setAuthor(sc.nextLine());
 		
-		System.out.print("ISBN");
-		book.setIsbn(sc.next());
+		System.out.print("ISBN : ");
+		book.setIsbn(sc.nextLine());
 		
 		System.out.print("카테고리코드 : ");
-		book.setCategory(sc.next());
+		book.setCategory(sc.nextLine());
 		return book;
 	}
 	

@@ -22,18 +22,18 @@ public class BookDao {
 	}
 	
 	public Book selectBookByTitle(Session session,String title) {
-		Query query =  session.createQuery("from Book b where b.title = :title",Book.class);
+		Query query =  session.createQuery("from Book b where b.title like '%'|| :title ||'%'",Book.class);
 		query.setParameter("title", title);
 		return (Book)query.getSingleResult();
 	}
 	
 	public void insertBook(Session session, Book book) {
-		session.save(book);
+		session.saveOrUpdate(book);
 	}
 
 	public void updateBook(Session session, Book book) {
 		Book entity = session.get(Book.class, book.getBkIdx());
-		session.update(entity);
+		entity.setInfo(book.getInfo());
 	}
 	
 	public void deleteBookByBkIdx(Session session, String bkIdx) {
