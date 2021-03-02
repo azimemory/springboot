@@ -10,6 +10,7 @@ public class RentDao {
 	
 	public List<RentMaster> selectRentList(Connection conn, String userId) {
 		List<RentMaster> rentList = new ArrayList<RentMaster>();
+		
 		return rentList;
 	}
 	

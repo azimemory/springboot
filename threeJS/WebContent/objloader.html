@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset=utf-8>
+	<title>My first three.js app</title>
+	<style>
+		body {
+			margin: 0;
+		}
+
+		canvas {
+			width: 100%;
+			height: 100%
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Three js -->
+	<script src="https://threejs.org/build/three.min.js"></script>
+	<!-- WebGL 지원유무 https://github.com/mrdoob/three.js/blob/master/examples/js/WebGL.js 참고 -->
+	<script src="./WebGL.js"></script>
+	<!-- OrbitControls.js allow the camera to orbit around a target 마우스와 카메라를 상호작용하게 합니다. -->
+	<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+	<!-- OBJ Loader를 사용하기 위해 추가. https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/OBJLoader.js 와 동일 소스  -->
+	<script src="./objloader.js"></script>
+	 <!-- OBJ Loader에 Material을 씌우기 위한 라이브러리 추가. https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/MTLLoader.js 와 동일 소스 -->
+    <script src="./MTLLoader.js"></script>
+
+
+	<script>
+	window.onload = function (e) {
+			
+			let scene = new THREE.Scene();
+			let light;
+			let camera;
+			let loader; // OBJLoader 객체를 넣을 변수를 선언합니다.
+			let mtlLoader; // MTLLoader 객체를 넣을 변수를 선언합니다.
+			
+			initThree();
+			addDirectionalLight();
+			loadObjLoader();
+
+			/**
+			 * DirectionalLight를 추가하는 함수
+			 *
+			 * @method addDirectionalLight
+			 */
+			function addDirectionalLight() {
+
+				light = new THREE.DirectionalLight(0xffffff, 1);
+				light.position.x = 5;
+				light.position.y = 5;
+				light.position.z = 1;
+				scene.add(light);
+			}
+			
+		  function loadMTLLoader() {
+                mtlLoader = new THREE.MTLLoader();
+                // MTLLoader Material 파일을 사용할 전역 경로를 설정합니다.
+                mtlLoader.setPath('/');
+                // 로드할 Material 파일 명을 입력합니다.
+                mtlLoader.load('solarsystem.mtl', function (materials) {
+                    // 로드 완료되었을때 호출하는 함수
+                    materials.preload();
+                    loadOBJLoader(materials);
+                }, function (xhr) {
+                    // 로드되는 동안 호출되는 함수
+                    console.log('MTLLoader: ', xhr.loaded / xhr.total * 100, '% loaded');
+                }, function (error) {
+                    // 로드가 실패했을때 호출하는 함수
+                    console.error('MTLLoader 로드 중 오류가 발생하였습니다.', error);
+                    alert('MTLLoader 로드 중 오류가 발생하였습니다.');
+                });
+            }
+
+			/**
+			 * .obj 파일의 모델을 로드하는 함수
+			 *
+			 * @method loadObjLoader
+			 */
+			function loadObjLoader() {
+				loader = new THREE.OBJLoader();
+				loader.load('./solarsystem.obj', function (object) {
+					// 모델 로드가 완료되었을때 호출되는 함수
+					scene.add(object);
+				}, function (xhr) {
+					// 모델이 로드되는 동안 호출되는 함수
+					console.log(xhr.loaded / xhr.total * 100, '% loaded');
+				}, function (error) {
+					// 모델 로드가 실패했을 때 호출하는 함수
+					alert('모델을 로드 중 오류가 발생하였습니다.');
+				});
+			}
+
+			/**
+			 * Threejs 초기화 함수
+			 *
+			 * @method initThree
+			 */
+			function initThree() {
+				// 브라우저가 WebGL을 지원하는지 체크
+				if (WEBGL.isWebGLAvailable()) {
+					console.log('이 브라우저는 WEBGL을 지원합니다.');
+				} else {
+					console.log('이 브라우저는 WEBGL을 지원하지 않습니다.');
+				}
+
+				camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 3, 500000);
+
+				let renderer = new THREE.WebGLRenderer({
+					antialias: true
+				});
+				
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+
+				camera.zoom = 1;
+				camera.fov = 50;
+				
+				let controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls.rotateSpeed = 1;
+                controls.zoomSpeed = 1;
+                controls.panSpeed = 0.8;
+                controls.minDistance = 100;
+                controls.maxDistance = 500000;
+
+				function animate() {
+					requestAnimationFrame(animate);
+					renderer.render(scene, camera);
+				}
+				
+				animate();
+			}
+		}
+	</script>
+</body>
+
+</html>

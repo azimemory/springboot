@@ -1,15 +1,11 @@
 package com.kh.bookmanager.book.model.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import com.kh.bookmanager.book.model.dao.BookDao;
 import com.kh.bookmanager.book.model.vo.Book;
 
