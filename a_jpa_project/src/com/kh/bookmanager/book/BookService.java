@@ -8,7 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class BookService {
-	BookRepository bookDao = new BookRepository();
+	
+	BookRepository bookRepository = new BookRepository();
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_project");
 	
 	private Session getSession() {
@@ -17,32 +18,38 @@ public class BookService {
 		return session;
 	}
 	
-	public List<Book> selectAllBooks(){
+	public Book findBook(Long bkIdx){
 		try(Session session = getSession()){
-			return bookDao.selectAllBooks(session);
+			return session.get(Book.class, bkIdx);
 		}
 	}
 	
-	public List<Book> selectBookOrderByRank() {
+	public List<Book> findBookAll(){
 		try(Session session = getSession()){
-			return bookDao.selectBookOrderByRank(session);
+			return bookRepository.findBookAll(session);
 		}
 	}
 	
-	public Book selectBookByTitle(String title) {
+	public List<Book> findBookOrderByRank() {
 		try(Session session = getSession()){
-			return bookDao.selectBookByTitle(session, title);
+			return bookRepository.findBookOrderByRank(session);
 		}
 	}
 	
-	public boolean insertBook(Book book) {
+	public Book findBookByTitle(String title) {
+		try(Session session = getSession()){
+			return bookRepository.findBookByTitle(session, title);
+		}
+	}
+	
+	public boolean persistBook(Book book) {
 		boolean res = false;
 		Transaction tx = null;
 		
 		try(Session session = getSession()){
 			tx = session.getTransaction();
 			tx.begin();
-			bookDao.insertBook(session, book);
+			session.save(book);
 			tx.commit();
 			res = true;
 		}catch (Exception e) {
@@ -59,7 +66,8 @@ public class BookService {
 		try(Session session = getSession()){
 			tx = session.getTransaction();
 			tx.begin();
-			bookDao.updateBook(session, book);
+			Book bookEntity = session.get(Book.class, book.getBkIdx());
+			bookEntity.setInfo(book.getInfo());
 			tx.commit();
 			res = true;
 		}catch (Exception e) {
@@ -69,13 +77,14 @@ public class BookService {
 		return res;
 	}
 	
-	public boolean deleteBookByBkIdx(String bkIdx){
+	public boolean deleteBookByBkIdx(Long bkIdx){
 		boolean res = false;
 		Transaction tx = null;
 		try(Session session = getSession()){
 			tx = session.getTransaction();
 			tx.begin();
-			bookDao.deleteBookByBkIdx(session, bkIdx);
+			Book bookEntity = session.get(Book.class,bkIdx);
+			session.delete(bookEntity);
 			tx.commit();
 			res = true;
 		}catch (Exception e) {

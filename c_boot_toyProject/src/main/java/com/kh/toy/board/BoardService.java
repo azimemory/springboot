@@ -16,7 +16,7 @@ import com.kh.toy.common.code.ErrorCode;
 import com.kh.toy.common.exception.ToAlertException;
 import com.kh.toy.common.util.file.FileEntity;
 import com.kh.toy.common.util.file.FileUtil;
-import com.kh.toy.common.util.jpa.MergeEntityBuilder;
+import com.kh.toy.common.util.jpa.EntityUtilsBuilder;
 import com.kh.toy.common.util.paging.Paging;
 
 @Service
@@ -83,8 +83,8 @@ private BoardRepository repo;
 		List<FileEntity> fileEntitys = fileUtil.fileUpload(files); //수정할 때 추가한 파일 업로드
 		boardEntity.getFileList().addAll(fileEntitys); //board 엔티티에 파일내용 추가
 		//수정된 게시글 내용 병합
-		boardEntity = new MergeEntityBuilder<Board>()
-					.entity(boardEntity).vo(board).ignoreJVMDeafultSetting(true).build().get();
+		boardEntity = new EntityUtilsBuilder<Board>()
+					.entity(boardEntity).vo(board).ignoreJVMDeafultSetting(true).build().mergeEntityWithVo();
 	}
 
 	public void deleteBoard(Long bdIdx) {

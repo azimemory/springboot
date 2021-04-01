@@ -1,9 +1,7 @@
 package com.kh.bookmanager.view.member;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import com.kh.bookmanager.member.Member;
 import com.kh.bookmanager.member.MemberController;
 
@@ -11,17 +9,16 @@ public class MemberMenu {
 	
 	private Scanner sc = new Scanner(System.in);
 	private MemberController memberController = new MemberController();
-	
 	public void memberMenu() {
 		
 		do {
 			System.out.println("\n***  회원 관리 프로그램 ***");
 			System.out.println("1. 회원 전체 조회");
 			System.out.println("2. 새 회원 등록");
-			System.out.println("3. 회원 암호 수정");
+			System.out.println("3. 회원 수정");
 			System.out.println("4. 회원 탈퇴");
 			System.out.println("5. 회원 검색");
-			System.out.println("6. 종료");
+			System.out.println("6. 이전 페이지");
 			System.out.print("번호 입력 : ");
 			
 			switch(sc.nextInt()) {
@@ -38,17 +35,28 @@ public class MemberMenu {
 					break;
 				case 3: 
 					sc.nextLine();
-					Member member = new Member();
-					System.out.print("비밀번호를 변경할 아이디 : ");
-					member.setUserId(sc.nextLine());
+					System.out.print("회원정보를 수정할 아이디 : ");
+					Member member = memberController.searchById(sc.nextLine());
 					
 					System.out.print("변경할 비밀번호 : ");
-					member.setPassword(sc.next());
+					String password = sc.nextLine();
+					if(!password.equals("")) 
+						member.setPassword(password);
+					
+					System.out.print("변경할 전화번호 : ");
+					String tell = sc.nextLine();
+					if(!tell.equals("")) 
+						member.setTell(tell);
+					
+					System.out.print("변경할 이메일 : ");
+					String email = sc.nextLine();
+					if(!email.equals("")) 
+						member.setEmail(email);
 					
 					if(memberController.modify(member)) {
-						System.out.println("암호 수정이 성공적으로 완료되었습니다.");
+						System.out.println("회원정보 수정이 성공적으로 완료되었습니다.");
 					}else {
-						System.out.println("존재하지 않는 사용자입니다.");
+						System.out.println("회원정보 수정에 실패하였습니다.");
 					}
 					break;
 					
@@ -111,7 +119,6 @@ public class MemberMenu {
 						 
 				case 3 : return;
 				default : System.out.println("잘못 입력되었습니다. 다시 입력하세요.");
-						 
 			}
 		}while(true);
 	}

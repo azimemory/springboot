@@ -5,7 +5,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.kh.bookmanager.member.Member;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -24,11 +24,11 @@ public class RentMaster implements Serializable {
 	@Column(columnDefinition = "number default 0")
 	private int isReturn;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "rmIdx")
 	private List<RentBook> rentBooks;
 
-	@ManyToOne
-	@JoinColumn(name="userId")
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Member member;
 
 	public RentMaster() {
@@ -58,7 +58,7 @@ public class RentMaster implements Serializable {
 	public void setRentBookCnt(int rentBookCnt) {
 		this.rentBookCnt = rentBookCnt;
 	}
-
+	
 	public Date getRegDate() {
 		return regDate;
 	}

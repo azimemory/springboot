@@ -23,7 +23,7 @@ public class RentMenu {
 			System.out.println("2. 도서 반납");
 			System.out.println("3. 도서 연장");
 			System.out.println("4. 대출 중인 대출건 조회");
-			System.out.println("5. 끝내기");
+			System.out.println("5. 이전 페이지");
 			System.out.print("선택 : ");
 			
 			switch (sc.nextInt()) {
@@ -59,7 +59,7 @@ public class RentMenu {
 				
 			case 4: //대출건을 조회할 사용자의 아이디를 입력받아
 					//rentController 의 searchRentList 메서드 호출
-				 
+
 					//반환 받은 rentList를 출력
 					//대출건 목록을 출력한 다음
 					//사용자에게 대출건 상세 조회여부를 물어

@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.kh.toy.common.code.ErrorCode;
 import com.kh.toy.common.exception.ToAlertException;
-import com.kh.toy.common.util.jpa.MergeEntity;
-import com.kh.toy.common.util.jpa.MergeEntityBuilder;
+import com.kh.toy.common.util.jpa.EntityUtils;
+import com.kh.toy.common.util.jpa.EntityUtilsBuilder;
 //@Controller : 
 //@RequestMapping : 해당 메서드와 매핑시킬 요청 url을 지정, http method 상관없음
 //@GetMapping : 해당 메서드와 매핑시킬 요청 url을 지정, Get method만 매핑
@@ -150,9 +150,9 @@ public class MemberController {
 	public String modify(@ModelAttribute Member updateInfo
 						,@SessionAttribute("userInfo") Member userInfo){
 		
-		MergeEntity<Member> merge = new MergeEntityBuilder<Member>()
+		EntityUtils<Member> merge = new EntityUtilsBuilder<Member>()
 				.entity(userInfo).vo(updateInfo).ignoreJVMDeafultSetting(true).build();
-		memberService.updateMember(merge.get());
+		memberService.updateMember(merge.mergeEntityWithVo());
 		return "member/mypage";
 	}
 	

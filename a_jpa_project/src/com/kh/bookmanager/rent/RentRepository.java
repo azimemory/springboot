@@ -8,7 +8,6 @@ public class RentRepository {
 	
 	public List<RentMaster> selectRentList(Connection conn, String userId) {
 		List<RentMaster> rentList = new ArrayList<RentMaster>();
-		
 		return rentList;
 	}
 	
@@ -34,5 +33,4 @@ public class RentRepository {
 	public void updateExtendRentState(Connection conn, int rbIdx)  {
 
 	}
-
 }

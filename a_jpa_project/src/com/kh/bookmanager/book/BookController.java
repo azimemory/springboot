@@ -7,27 +7,31 @@ public class BookController {
 	BookService bookService = new BookService();
 	
 	public List<Book> searchAllBooks(){
-		return null;
+		return bookService.findBookAll();
 	}
 	
 	public List<Book> searchBooksWithRank(){
-		return null;
+		return bookService.findBookOrderByRank();
+	}
+	
+	public Book searchBookByBkIdx(String bkIdx) {
+		return bookService.findBook(Long.parseLong(bkIdx));
 	}
 	
 	public Book searchBookByTitle(String title) {
-		return null;
+		return bookService.findBookByTitle(title);
 	}
 	
 	public boolean registBook(Book book) {
-		return false;
+		return bookService.persistBook(book);
 	}
 	
 	public boolean modifyBook(Book book) {
-		return false;
+		return bookService.updateBook(book);
 	}
 	
 	public boolean deleteBook(String bkIdx) {
-		return false;
+		return bookService.deleteBookByBkIdx(Long.parseLong(bkIdx));
 	}
 
 }

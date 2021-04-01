@@ -1,10 +1,10 @@
 package com.kh.toy.member.validator;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.kh.toy.member.Member;
@@ -22,7 +22,7 @@ public class MemberValidator implements Validator{
 	@Override
 	public boolean supports(Class<?> clazz) {
 		//컨트롤러의 파라미터 타입이 Member 일때만 검사
-		return Member.class.equals(clazz);
+		return Map.class.equals(clazz);
 	}
 
 	@Override

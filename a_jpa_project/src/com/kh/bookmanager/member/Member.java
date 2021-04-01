@@ -1,20 +1,21 @@
 package com.kh.bookmanager.member;
 
 import java.io.Serializable;
+import java.sql.Date;
+
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.kh.bookmanager.rent.RentMaster;
-import java.util.Date;
 import java.util.List;
 
-
-/**
- * The persistent class for the MEMBER database table.
- * 
- */
+//2차 캐시 적용
+//C:\oraclexe\app\oracle\diag\tnslsnr\DESKTOP-O3BP1VU\listener\trace에서 db 접속로그 확인
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
 @Entity
 @DynamicInsert
 @DynamicUpdate
@@ -28,16 +29,16 @@ public class Member implements Serializable {
 	@Column(columnDefinition = "number default 0")
 	private int isLeave;
 	private String password;
+	
 	@Column(columnDefinition = "date default sysdate")
 	private Date regDate;
 	@Column(columnDefinition = "date default sysdate")
 	private Date rentableDate;
 	private String tell;
 	
-	//FetchType.EAGER : 즉시로딩 사용, Member Entity를 꾸리기 위한 모든 정보를 즉시 로딩한다. 기본적으로 지연로딩이 설정되어 있다. 
-	//지연로딩을 사용하면 TB_MEMBER 테이블에서 회원정보만 가져온 다음 주문 정보가 필요한 시점에 rentMasters 쿼리를 날린다. 
-	@OneToMany
-	@JoinColumn(name = "userId")
+	@OneToMany(fetch = FetchType.EAGER) //즉시 로딩
+	//@OneToMany //기본값은 지연로딩
+	@JoinColumn(name="userId")
 	private List<RentMaster> rentMasters;
 
 	public Member() {
@@ -83,9 +84,9 @@ public class Member implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	public Date getRegDate() {
-		return this.regDate;
+		return regDate;
 	}
 
 	public void setRegDate(Date regDate) {
@@ -93,7 +94,7 @@ public class Member implements Serializable {
 	}
 
 	public Date getRentableDate() {
-		return this.rentableDate;
+		return rentableDate;
 	}
 
 	public void setRentableDate(Date rentableDate) {
@@ -134,6 +135,4 @@ public class Member implements Serializable {
 				+ ", password=" + password + ", regDate=" + regDate + ", rentableDate=" + rentableDate + ", tell="
 				+ tell + ", rentMasters=" + rentMasters + "]";
 	}
-	
-	
 }

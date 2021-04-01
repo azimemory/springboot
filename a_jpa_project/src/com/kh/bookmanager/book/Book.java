@@ -5,9 +5,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @DynamicInsert
@@ -79,7 +77,7 @@ public class Book implements Serializable {
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
-
+	
 	public Date getRegDate() {
 		return regDate;
 	}

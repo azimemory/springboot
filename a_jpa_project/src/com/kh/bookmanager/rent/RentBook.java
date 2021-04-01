@@ -5,9 +5,11 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.kh.bookmanager.book.Book;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @DynamicInsert
@@ -18,16 +20,17 @@ public class RentBook implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long rbIdx;
-	private Long bkIdx;
 	@Column(columnDefinition = "number default 0")
 	private int extentionCnt;
 	@Column(columnDefinition = "date default sysdate")
 	private Date regDate;
 	@Column(columnDefinition = "date default sysdate+7")
 	private Date returnDate;
+	@Column(columnDefinition = "varchar2(4 char) default 'RE01'")
 	private String state;
 
 	@OneToOne
+	@JoinColumn(name = "bkIdx")
 	private Book book;
 
 	public RentBook() {
@@ -41,14 +44,6 @@ public class RentBook implements Serializable {
 		this.rbIdx = rbIdx;
 	}
 
-	public Long getBkIdx() {
-		return bkIdx;
-	}
-
-	public void setBkIdx(Long bkIdx) {
-		this.bkIdx = bkIdx;
-	}
-
 	public int getExtentionCnt() {
 		return extentionCnt;
 	}
@@ -56,7 +51,7 @@ public class RentBook implements Serializable {
 	public void setExtentionCnt(int extentionCnt) {
 		this.extentionCnt = extentionCnt;
 	}
-
+	
 	public Date getRegDate() {
 		return regDate;
 	}
