@@ -1,6 +1,4 @@
 # springboot
-Springboot 수업자료
-
 SpringBoot 수업 진행
 
 part1 : JPA
@@ -23,3 +21,4 @@ part1 : JPA
 part2 : SpringBoot
 16. SpringBoot thymeleaf
 17. SpringBoot security
+
