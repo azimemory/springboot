@@ -1,6 +1,7 @@
 SpringBoot 수업 진행
 
 part1 : JPA
+
 0. JPA의 사용 이유, PersistenceContext, EntityFactory, EntityManager
 1. @JoinColumn없이 객체 설계 - 이후 테이블 erd 보여주기
 2. @JoinColumn 설명 이후 다시 객체 설계 - 테이블 erd 보여주기
