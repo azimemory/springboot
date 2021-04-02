@@ -17,8 +17,8 @@ part1 : JPA
 13. JPQL 
 14. SpringBoot Data
 15. SpringBoot queryDsl
-
-part2 : SpringBoot
 16. SpringBoot thymeleaf
 17. SpringBoot security
+
+
 
