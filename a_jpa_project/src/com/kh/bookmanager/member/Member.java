@@ -1,8 +1,6 @@
 package com.kh.bookmanager.member;
 
 import java.io.Serializable;
-import java.sql.Date;
-
 import javax.persistence.*;
 
 import org.hibernate.annotations.Cache;
@@ -11,11 +9,14 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.kh.bookmanager.rent.RentMaster;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 //2차 캐시 적용
-//C:\oraclexe\app\oracle\diag\tnslsnr\DESKTOP-O3BP1VU\listener\trace에서 db 접속로그 확인
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
 @Entity
 @DynamicInsert
 @DynamicUpdate
@@ -31,15 +32,17 @@ public class Member implements Serializable {
 	private String password;
 	
 	@Column(columnDefinition = "date default sysdate")
-	private Date regDate;
+	@Temporal(TemporalType.DATE)
+	private Calendar regDate;
 	@Column(columnDefinition = "date default sysdate")
-	private Date rentableDate;
+	@Temporal(TemporalType.DATE)
+	private Calendar rentableDate;
 	private String tell;
 	
-	@OneToMany(fetch = FetchType.EAGER) //즉시 로딩
-	//@OneToMany //기본값은 지연로딩
-	@JoinColumn(name="userId")
-	private List<RentMaster> rentMasters;
+	//ToMany의 경우 default가 lazy 이기 때문에 npe 방지를 위해 빈 인스턴스를 생성해주는 것이 규약
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member") //즉시 로딩
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private List<RentMaster> rentMasters = new ArrayList<RentMaster>();
 
 	public Member() {
 		
@@ -84,20 +87,20 @@ public class Member implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public Date getRegDate() {
+
+	public Calendar getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(Calendar regDate) {
 		this.regDate = regDate;
 	}
 
-	public Date getRentableDate() {
+	public Calendar getRentableDate() {
 		return rentableDate;
 	}
 
-	public void setRentableDate(Date rentableDate) {
+	public void setRentableDate(Calendar rentableDate) {
 		this.rentableDate = rentableDate;
 	}
 
@@ -110,7 +113,7 @@ public class Member implements Serializable {
 	}
 
 	public List<RentMaster> getRentMasters() {
-		return this.rentMasters;
+		return rentMasters;
 	}
 
 	public void setRentMasters(List<RentMaster> rentMasters) {

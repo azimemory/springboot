@@ -10,9 +10,9 @@ public class MemberRepository {
 	public MemberRepository() {}
  		
 	public List<Member> findAll(EntityManager em){	
-		String jpql = "from Member";
-		//String fetchJoin = "select m from Member m join fetch m.rentMasters";
-		return em.createQuery(jpql).getResultList();
+		//String jpql = "from Member";
+		String fetchJoin = "select distinct m from Member m left join fetch m.rentMasters";
+		return em.createQuery(fetchJoin).getResultList();
 	}
 	
 	public List<Member> findMemberByRegdate(EntityManager em, Date begin, Date end){	

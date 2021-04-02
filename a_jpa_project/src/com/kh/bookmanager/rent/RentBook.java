@@ -3,6 +3,8 @@ package com.kh.bookmanager.rent;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
@@ -10,10 +12,13 @@ import org.hibernate.annotations.FetchMode;
 
 import com.kh.bookmanager.book.Book;
 import java.sql.Date;
+import java.util.Calendar;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
 public class RentBook implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,13 +28,15 @@ public class RentBook implements Serializable {
 	@Column(columnDefinition = "number default 0")
 	private int extentionCnt;
 	@Column(columnDefinition = "date default sysdate")
-	private Date regDate;
+	@Temporal(TemporalType.DATE)
+	private Calendar regDate;
 	@Column(columnDefinition = "date default sysdate+7")
-	private Date returnDate;
+	@Temporal(TemporalType.DATE)
+	private Calendar returnDate;
 	@Column(columnDefinition = "varchar2(4 char) default 'RE01'")
 	private String state;
 
-	@OneToOne
+	@OneToOne()
 	@JoinColumn(name = "bkIdx")
 	private Book book;
 
@@ -51,20 +58,20 @@ public class RentBook implements Serializable {
 	public void setExtentionCnt(int extentionCnt) {
 		this.extentionCnt = extentionCnt;
 	}
-	
-	public Date getRegDate() {
+
+	public Calendar getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(Calendar regDate) {
 		this.regDate = regDate;
 	}
 
-	public Date getReturnDate() {
+	public Calendar getReturnDate() {
 		return returnDate;
 	}
 
-	public void setReturnDate(Date returnDate) {
+	public void setReturnDate(Calendar returnDate) {
 		this.returnDate = returnDate;
 	}
 

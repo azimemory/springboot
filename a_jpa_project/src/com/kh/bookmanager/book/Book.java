@@ -3,13 +3,17 @@ package com.kh.bookmanager.book;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import java.sql.Date;
+import java.util.Calendar;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
 public class Book implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -22,7 +26,8 @@ public class Book implements Serializable {
 	private String info;
 	private String isbn;
 	@Column(columnDefinition = "date default sysdate")
-	private Date regDate;
+	@Temporal(TemporalType.DATE)
+	private Calendar regDate;
 	@Column(columnDefinition = "number default 0")
 	private int rentCnt;
 	private String title;
@@ -78,11 +83,11 @@ public class Book implements Serializable {
 		this.isbn = isbn;
 	}
 	
-	public Date getRegDate() {
+	public Calendar getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(Calendar regDate) {
 		this.regDate = regDate;
 	}
 

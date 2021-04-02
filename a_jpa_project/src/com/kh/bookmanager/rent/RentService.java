@@ -35,8 +35,6 @@ public class RentService {
 			String title = bookList.get(0).getTitle() + " 외 " + bookList.size() + "권";
 			RentMaster rentMaster = new RentMaster();
 			rentMaster.setTitle(title);
-			
-			
 			for (Book book : bookList) {
 				
 			}

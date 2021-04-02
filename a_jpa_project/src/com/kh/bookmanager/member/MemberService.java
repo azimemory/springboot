@@ -8,18 +8,22 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import com.kh.bookmanager.rent.RentMaster;
+
+import net.sf.ehcache.CacheManager;
 import oracle.sql.DATE;
 
 public class MemberService {
+	
 	//EntityManagerFactory는 threadSafe하기 때문에 전역에 선언
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_project");
+	EntityManagerFactory emf 
+			= Persistence.createEntityManagerFactory("jpa_project");
 	MemberRepository memberRepository = new MemberRepository();
 	
 	public Member findMemberById(String userId){
 		//EntityManager는 threadSafe하지 않기 때문에 지역에 선언해준다.
 		EntityManager em = emf.createEntityManager();
 		Member member = null;
-		
 		try {
 			member = em.find(Member.class, userId);
 		} finally {
@@ -58,9 +62,13 @@ public class MemberService {
 	
 	public boolean persistMember(Member member){
 		boolean res = false;
-		EntityManager em = emf.createEntityManager(); // 1. 영속성컨텍스트 생성
+		
+		//EntityManager는 threadSafe 할 수 있도록 지역에 선언
+		EntityManager em = emf.createEntityManager(); 
+		
 		EntityTransaction tx = em.getTransaction(); 
 		tx.begin(); //2. 트랜잭션 시작
+		
 		try {
 			em.persist(member); //3. 영속성 등록
 			tx.commit(); //4. 쿼리 생성
