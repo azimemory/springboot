@@ -1,7 +1,5 @@
 SpringBoot 수업 진행
 
-part1 : JPA
-
 0. JPA의 사용 이유, PersistenceContext, EntityFactory, EntityManager
 1. @JoinColumn없이 객체 설계 - 이후 테이블 erd 보여주기
 2. @JoinColumn 설명 이후 다시 객체 설계 - 테이블 erd 보여주기
@@ -12,13 +10,13 @@ part1 : JPA
 7. 결과 확인(inner join의 결과로 동일한 회원이 여러개 반환 된 것 확인)
 8. rentMaster 필드를 List -> LinkedHashSet으로 변환
 9. mappedBy 설명 (외래키를 한 곳에서만) + 양방향매핑 주의사항
-11. 2차캐시 설정 및 설명
-12. Hibernate Session 객체
-13. JPQL 
-14. SpringBoot Data
-15. SpringBoot queryDsl
-16. SpringBoot thymeleaf
-17. SpringBoot security
+10. 2차캐시 설정 및 설명
+11. Hibernate Session 객체
+12. JPQL 
+13. SpringBoot Data
+14. SpringBoot queryDsl
+15. SpringBoot thymeleaf
+16. SpringBoot security
 
 
 
