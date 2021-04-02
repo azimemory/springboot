@@ -1,4 +1,3 @@
-# springboot
 SpringBoot 수업 진행
 
 part1 : JPA
