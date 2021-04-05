@@ -6,19 +6,19 @@ public class BookController {
 	
 	BookService bookService = new BookService();
 	
-	public List<Book> searchAllBooks(){
-		return bookService.findBookAll();
+	public List<Book> findBooksAll(){
+		return bookService.findBooksAll();
 	}
 	
-	public List<Book> searchBooksWithRank(){
+	public List<Book> findBooksWithRank(){
 		return bookService.findBookOrderByRank();
 	}
 	
-	public Book searchBookByBkIdx(String bkIdx) {
+	public Book findBookByBkIdx(String bkIdx) {
 		return bookService.findBook(Long.parseLong(bkIdx));
 	}
 	
-	public Book searchBookByTitle(String title) {
+	public Book findBookByTitle(String title) {
 		return bookService.findBookByTitle(title);
 	}
 	

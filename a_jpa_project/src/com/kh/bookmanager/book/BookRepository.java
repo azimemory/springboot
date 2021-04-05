@@ -7,7 +7,7 @@ import org.hibernate.query.Query;
 //JPA raw API를 구현한 Hibernate 클래스 실습
 public class BookRepository {
 	
-	public List<Book> findBookAll(Session session){		
+	public List<Book> findBooksAll(Session session){		
 		List<Book> bookList = session.createQuery("from Book").list();
 		return bookList;
 	}

@@ -18,7 +18,7 @@ import java.util.Calendar;
 @DynamicInsert
 @DynamicUpdate
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
 public class RentBook implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,7 @@ public class RentBook implements Serializable {
 	@Column(columnDefinition = "date default sysdate+7")
 	@Temporal(TemporalType.DATE)
 	private Calendar returnDate;
-	@Column(columnDefinition = "varchar2(4 char) default 'RE01'")
+	@Column(columnDefinition = "varchar2(4 char) default '대출'")
 	private String state;
 
 	@OneToOne()
@@ -89,5 +89,11 @@ public class RentBook implements Serializable {
 
 	public void setBook(Book book) {
 		this.book = book;
+	}
+
+	@Override
+	public String toString() {
+		return "RentBook [rbIdx=" + rbIdx + ", extentionCnt=" + extentionCnt + ", regDate=" + regDate + ", returnDate="
+				+ returnDate + ", state=" + state + ", book=" + book + "]";
 	}
 }

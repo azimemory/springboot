@@ -1,36 +1,26 @@
 package com.kh.bookmanager.rent;
 
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 public class RentRepository {
 	
-	public List<RentMaster> selectRentList(Connection conn, String userId) {
-		List<RentMaster> rentList = new ArrayList<RentMaster>();
-		return rentList;
+	public List<Rent> findRentByUserIdAndState(String userId, Session session) {
+		Query<Rent> query 
+		= session.createQuery("select distinct r from Rent r inner join fetch r.rentBooks"
+				+ " where r.member.userId = :userId"
+				+ " and state = '대출'");
+		query.setParameter("userId", userId);
+		return query.getResultList();
 	}
 	
-	public List<RentBook> selectRentBookList(Connection conn, String rmIdx) {
-		List<RentBook> rentBookList = new ArrayList<RentBook>();
-		return rentBookList;
-	}
-	
-	//tb_rent_master테이블에 주문건 정보 입력
-	public int insertRentInfo(Connection conn, RentMaster rent) {
-		int result = 0;		
-		return result;
-	}
-
-	public void insertRentBookInfo(Connection conn, int bIdx)   {		
-		
-	} 
-	
-	public void updateReturnRentBook(Connection conn, int rbIdx)  {
-
-	}
-	
-	public void updateExtendRentState(Connection conn, int rbIdx)  {
-
+	public Rent findRentByRbIdx(Long rbIdx, Session session) {
+		Query<Rent> query 
+		= session.createQuery("from Rent r "
+				+ " where rbIdx = :rbIdx");
+		query.setParameter("rbIdx", rbIdx);
+		return query.getSingleResult();
 	}
 }

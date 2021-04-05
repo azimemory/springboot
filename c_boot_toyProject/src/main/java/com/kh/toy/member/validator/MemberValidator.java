@@ -22,7 +22,7 @@ public class MemberValidator implements Validator{
 	@Override
 	public boolean supports(Class<?> clazz) {
 		//컨트롤러의 파라미터 타입이 Member 일때만 검사
-		return Map.class.equals(clazz);
+		return Member.class.equals(clazz);
 	}
 
 	@Override

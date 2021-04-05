@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.kh.toy.common.code.Code;
 
@@ -16,19 +17,20 @@ import com.kh.toy.common.code.Code;
 public class FileEntity {
 	
 	@Id
-	@GeneratedValue
-	private Long flIdx;
+	@GenericGenerator(name="uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+	private String flIdx;
 	private String originFileName;
 	private String renameFileName;
 	private String savePath;
 	private String isDel;
 	Date regDate;
 
-	public Long getFlIdx() {
+	public String getFlIdx() {
 		return flIdx;
 	}
 
-	public void setFlIdx(Long flIdx) {
+	public void setFlIdx(String flIdx) {
 		this.flIdx = flIdx;
 	}
 

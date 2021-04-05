@@ -9,10 +9,9 @@
     <h2 class="tit">*게시판</h2>
     <div class="desc_board">
       <div class="info" >
-          <span>번호 : [[${board.bdIdx}]]</span>
           <span>제목 : [[${board.title}]]</span>
-          <span th:text="|등록일 : ${board.regDate}|"></span>
           <span th:text="|작성자 : ${board.userId}|"></span>
+          <span th:text="|등록일 : ${board.regDate}|"></span>
       </div>
      <div class="info">
      	 <ol>
@@ -28,10 +27,10 @@
       <div class="btn_section">
           <button onclick="submitData('list')"><span>목록</span></button>
           <button th:unless="${session.userInfo == null || session.userInfo.userId != board.userId}"
-          		  th:onclick="|submitData('modify?bdIdx=${board.bdIdx}')|"
+          		  th:onclick="submitData('modify?bdIdx=[(${board.bdIdx})]')"
           ><span>수정</span></button>
           <button th:unless="${session.userInfo == null || session.userInfo.userId != board.userId}"
-          		  th:onclick="|submitData('delete?bdIdx=${board.bdIdx}')|"><span>삭제</span></button>
+          		  th:onclick="submitData('delete?bdIdx=[(${board.bdIdx})]')"><span>삭제</span></button>
       </div>
    </div>
 </div>

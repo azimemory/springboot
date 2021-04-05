@@ -5,12 +5,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.kh.toy.common.util.file.FileEntity;
 
@@ -19,8 +21,9 @@ import com.kh.toy.common.util.file.FileEntity;
 @DynamicUpdate
 public class Board {
 	@Id
-	@GeneratedValue
-	private Long bdIdx;
+	@GenericGenerator(name="uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+	private String bdIdx;
 	@ColumnDefault("'guest'")
 	private String userId;
 	@ColumnDefault("sysdate")
@@ -32,12 +35,12 @@ public class Board {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<FileEntity> fileList;
-
-	public Long getBdIdx() {
+	
+	public String getBdIdx() {
 		return bdIdx;
 	}
 
-	public void setBdIdx(Long bdIdx) {
+	public void setBdIdx(String bdIdx) {
 		this.bdIdx = bdIdx;
 	}
 

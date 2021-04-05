@@ -2,6 +2,8 @@ package com.kh.toy.board;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -30,7 +32,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("detail")
-	public String boardDetail(Long bdIdx, Model model) {
+	public String boardDetail(String bdIdx, Model model) {
 		model.addAttribute("board",boardService.selectBoardDetail(bdIdx));
 		return "board/board_view";
 	}
@@ -66,7 +68,7 @@ public class BoardController {
 	@GetMapping("modify")
 	public String modifyBoard(
 			 @SessionAttribute(name="userInfo") Member member
-			, Long bdIdx
+			, String bdIdx
 			, Model model) {
 		model.addAttribute("board",boardService.findBoardToModify(bdIdx, member.getUserId()));
 		return "/board/board_modify";
@@ -75,18 +77,18 @@ public class BoardController {
 	@PostMapping("modify")
 	public String modifyBoardImpl(
 			  @RequestParam List<MultipartFile> files
-			, @RequestParam(required = false) List<Long> delFiles
+			, @RequestParam(required = false) List<String> delFiles
 			, @SessionAttribute(name="userInfo") Member member
-			, Board board
+			, @RequestParam Map<String, String> commandMap
 			, Model model) {
 		
-		boardService.modifyBoard(board, delFiles, files, member.getUserId());
-		return "redirect:/board/detail?bdIdx=" + board.getBdIdx();
+		boardService.updateBoard(commandMap, delFiles, files, member.getUserId());
+		return "redirect:/board/detail?bdIdx=" + commandMap.get("bdIdx");
 	}
 	
 	@GetMapping("delete")
 	public String deleteBoardImpl(
-			  @RequestParam Long bdIdx
+			  @RequestParam String bdIdx
 			, @SessionAttribute(name="userInfo") Member member
 			, Model model) {
 		

@@ -19,8 +19,8 @@ import java.util.Set;
 @DynamicInsert
 @DynamicUpdate
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
-public class RentMaster implements Serializable {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
+public class Rent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -33,8 +33,13 @@ public class RentMaster implements Serializable {
 	private Calendar regDate;
 	@Column(columnDefinition = "number default 0")
 	private int isReturn;
-
-	@OneToMany(fetch = FetchType.EAGER)
+	
+	//CascadeType : 연관엔티티 처리 정책
+	//PERSIST : persist를 수행할 때 연관 앤티티도 함께 persist를 수행
+	//MERGE : 준영속상태인 엔티티를 merge할 때 연관 앤티티도 함께 수행
+	//REMOVE : 엔티티를 삭제할 때 연관 앤티티도 함께 삭제
+	//DETACH : 영속상태인 엔티티를 준 영속상태로 만들 때 연관 앤티티도 함께 수행
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinColumn(name = "rmIdx")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	//ToMany의 경우 default가 lazy 이기 때문에 npe 방지를 위해 빈 인스턴스를 생성해주는 것이 규약
@@ -44,7 +49,7 @@ public class RentMaster implements Serializable {
 	@JoinColumn(name="userId")
 	private Member member;
 
-	public RentMaster() {
+	public Rent() {
 		
 	}
 
@@ -103,4 +108,12 @@ public class RentMaster implements Serializable {
 	public void setMember(Member member) {
 		this.member = member;
 	}
+
+	//Member와 RentMaster가 양방향 매핑이기 때문에 무한 반복되는 것 확인 후 삭제
+	public String toString() {
+		return "Rent [rmIdx=" + rmIdx + ", title=" + title + ", rentBookCnt=" + rentBookCnt + ", regDate=" 
+				+ regDate.getTime()+ ", isReturn=" + isReturn + "]";
+	}
+	
+	
 }

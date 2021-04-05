@@ -8,7 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import com.kh.bookmanager.rent.RentMaster;
+import com.kh.bookmanager.rent.Rent;
 
 import net.sf.ehcache.CacheManager;
 import oracle.sql.DATE;

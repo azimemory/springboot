@@ -55,20 +55,20 @@ private BoardRepository repo;
 		 return commandMap;
 	}
 
-	public Board selectBoardDetail(Long bdIdx) {
+	public Board selectBoardDetail(String bdIdx) {
 		return repo.findById(bdIdx).orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
 	}
 	
-	public Board findBoardToModify(Long bdIdx, String userId) {
+	public Board findBoardToModify(String bdIdx, String userId) {
 		return repo.findBoardByBdIdxAndUserId(bdIdx,userId);
 	}
 	
 	@Transactional
-	public void modifyBoard(Board board, List<Long> delFiles, List<MultipartFile> files, String userId) {
+	public void updateBoard(Map<String,String> commandMap, List<String> delFiles, List<MultipartFile> files, String userId) {
 		FileUtil fileUtil = new FileUtil();
 		
 		//영속성 컨택스트에서 게시글 정보를 받아온다.
-		Board boardEntity = repo.findById(board.getBdIdx())
+		Board boardEntity = repo.findById(commandMap.get("bdIdx"))
 								.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
 		
 		//board 엔티티에서 사용자가 삭제한 파일 제거 +  파일 삭제
@@ -82,12 +82,9 @@ private BoardRepository repo;
 		
 		List<FileEntity> fileEntitys = fileUtil.fileUpload(files); //수정할 때 추가한 파일 업로드
 		boardEntity.getFileList().addAll(fileEntitys); //board 엔티티에 파일내용 추가
-		//수정된 게시글 내용 병합
-		boardEntity = new EntityUtilsBuilder<Board>()
-					.entity(boardEntity).vo(board).ignoreJVMDeafultSetting(true).build().mergeEntityWithVo();
 	}
 
-	public void deleteBoard(Long bdIdx) {
+	public void deleteBoard(String bdIdx) {
 		Board boardEntity = repo.findById(bdIdx)
 							.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
 		

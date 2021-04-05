@@ -23,7 +23,7 @@ public class BookMenu {
 			
 			switch(sc.nextInt()) {
 			case 1 :
-				for(Book data :  bookController.searchAllBooks()) {
+				for(Book data :  bookController.findBooksAll()) {
 					System.out.println(data);
 				}
 				break;
@@ -46,7 +46,7 @@ public class BookMenu {
 				//성공하면 "도서 수정 성공", 실패하면 "도서 수정 실패"를 출력하시오.
 				sc.nextLine();
 				System.out.print("수정 할 도서 번호 : ");
-				Book book = bookController.searchBookByBkIdx(sc.nextLine());
+				Book book = bookController.findBookByBkIdx(sc.nextLine());
 				
 				System.out.print("도서 소개 수정 : ");
 				book.setInfo(sc.nextLine());
@@ -93,13 +93,13 @@ public class BookMenu {
 				System.out.print("검색할 도서명 : ");
 				//bookController의 searchBookByTitle 메서드에 사용자가 입력한
 				//도서명을 전달하고 결과를 출력하시오.
-				System.out.println(bookController.searchBookByTitle(sc.nextLine()));
+				System.out.println(bookController.findBookByTitle(sc.nextLine()));
 				break;
 			case 2 :
 				System.out.println("대출 건수가 많은 상위 5권의 목록입니다.");
 				//bookController의 searchBookWithRank() 메서드를 호출해
 				//상위 다섯권의 도서 리스트를 반환받아, 리스트 안의 도서들을 출력
-				for(Book data :  bookController.searchBooksWithRank()) {
+				for(Book data :  bookController.findBooksWithRank()) {
 					System.out.println(data);
 				}
 				

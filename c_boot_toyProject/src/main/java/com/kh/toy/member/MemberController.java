@@ -1,10 +1,13 @@
 package com.kh.toy.member;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -85,7 +89,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("mailauth")
-	public String authenticateEmail(@Valid Member persistInfo
+	public String authenticateEmail(@Valid Member member
 					, Errors error //반드시 Errors 변수를 @Valid 변수 바로 뒤에 작성
 					, HttpSession session
 					, Model model) {
@@ -94,10 +98,10 @@ public class MemberController {
 			return "member/join";
 		}
 		
-		session.setAttribute("persistInfo", persistInfo);
+		session.setAttribute("persistInfo", member);
 		session.setAttribute("sessionId", session.getId());
 		
-		memberService.authenticateEmail(persistInfo,session.getId());
+		memberService.authenticateEmail(member,session.getId());
 		
 		model.addAttribute("msg", "이메일이 발송되었습니다.");
 		model.addAttribute("url","/index");
@@ -127,8 +131,8 @@ public class MemberController {
 	
 	@PostMapping("loginimpl")
 	@ResponseBody
-	public String loginImpl(@RequestBody Member authInfo, HttpSession session) {
-		Member member = memberService.authenticateUser(authInfo);
+	public String loginImpl(@RequestBody Map<String,String> commandMap, HttpSession session) {
+		Member member = memberService.authenticateUser(commandMap);
 		if(member != null) {
 			session.setAttribute("userInfo", member);
 			return "success";
@@ -147,12 +151,15 @@ public class MemberController {
 	public void myPage() {}
 	
 	@PostMapping("modify")
-	public String modify(@ModelAttribute Member updateInfo
+	public String modify(@RequestParam Map<String,Object> commandMap
 						,@SessionAttribute("userInfo") Member userInfo){
 		
-		EntityUtils<Member> merge = new EntityUtilsBuilder<Member>()
-				.entity(userInfo).vo(updateInfo).ignoreJVMDeafultSetting(true).build();
-		memberService.updateMember(merge.mergeEntityWithVo());
+		userInfo = new EntityUtilsBuilder<Member>()
+				.entity(userInfo)
+				.map(commandMap)
+				.build().mergeEntityWithMap();
+		
+		memberService.updateMember(userInfo);
 		return "member/mypage";
 	}
 	

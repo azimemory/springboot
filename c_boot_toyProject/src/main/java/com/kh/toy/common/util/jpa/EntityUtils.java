@@ -13,17 +13,11 @@ import com.kh.toy.common.exception.ToAlertException;
 public class EntityUtils<T> {
 	
 	private T entity;
-	private T vo;
-	private Map<String,String> map;
-	private boolean ignoreJVMDeafultSetting;
-	private List<String> ignoreProperties;
+	private Map<String,Object> map;
 	
 	protected EntityUtils(EntityUtilsBuilder<T> builder){
 		this.entity = builder.entity;
-		this.vo = builder.vo;
 		this.map = builder.map;
-		this.ignoreJVMDeafultSetting = builder.ignoreJVMDeafultSetting;
-		this.ignoreProperties = builder.ignoreProperties;
 	}
 	
 	public T mergeEntityWithMap() {
@@ -42,36 +36,6 @@ public class EntityUtils<T> {
 		return entity;
 	}
 	
-	public T mergeEntityWithVo() {
-		try {
-			//entity와 vo의 필드를 필드배열에 저장
-			Field[] entityFields  = getFields(entity);
-			Field[] voFields = getFields(vo);
-		
-			for (int i = 0; i < entityFields.length; i++){
-				if(voFields[i].getName().equals("serialVersionUID")) {
-					continue;
-				}
-				
-				if(ignoreJVMDeafultSetting) {
-					if(checkPropertiesValueIsJvmDefaultSetting(voFields[i])) {
-						continue;
-					}
-				}
-				
-				if(ignoreProperties.contains(entityFields[i].getName())) {
-					continue;
-				}
-				
-				entityFields[i].set(entity, voFields[i].get(vo));
-			}
-		} catch (IllegalArgumentException | IllegalAccessException e){
-			throw new ToAlertException(ErrorCode.CODE_500,e);
-		}
-		
-		return entity;
-	}
-	
 	private Field[] getFields(T t) {
 		Field[] fields  = t.getClass().getDeclaredFields();
 		for (Field field : fields) {
@@ -80,22 +44,4 @@ public class EntityUtils<T> {
 		}
 		return fields;
 	}
-	
-	private boolean checkPropertiesValueIsJvmDefaultSetting(Field voField) throws IllegalArgumentException, IllegalAccessException {
-		if(voField.get(vo) == null) {
-			return true;
-		}
-		
-		if(voField.get(vo).equals(0)) {
-			return true;
-		}
-		
-		if(voField.get(vo).equals('\u0000')) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	
 }

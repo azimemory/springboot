@@ -2,7 +2,7 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
 	<persistence-unit name="jpa_project" transaction-type="RESOURCE_LOCAL">
 		<class>com.kh.bookmanager.member.Member</class>
-		<class>com.kh.bookmanager.rent.RentMaster</class>
+		<class>com.kh.bookmanager.rent.Rent</class>
 		<class>com.kh.bookmanager.rent.RentBook</class>
 		<class>com.kh.bookmanager.book.Book</class>
 		<properties>

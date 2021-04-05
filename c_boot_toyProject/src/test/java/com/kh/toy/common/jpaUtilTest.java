@@ -18,23 +18,9 @@ import com.kh.toy.member.Member;
 public class jpaUtilTest {
 	
 	@Test
-	public void mergeEntityWithVoTest() {
-		Member entity = new Member();
-		Member vo = new Member();
-		entity.setUserId("azimemory");
-		entity.setPassword("123qwe!@#");
-		vo.setEmail("azimemory@gmail.com");
-		vo.setTell("010-1111-222");
-		
-		EntityUtils<Member> merge = new EntityUtilsBuilder<Member>()
-								.entity(entity).vo(vo).build();
-		System.out.println(merge.mergeEntityWithVo());
-	}
-	
-	@Test
 	public void mergeEntityWithMapTest() {
 		Member entity = new Member();
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String,Object> map = new HashMap<>();
 		
 		entity.setUserId("azimemory");
 		entity.setPassword("123qwe!@#");

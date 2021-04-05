@@ -1,5 +1,7 @@
 package com.kh.toy.member;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -33,10 +36,10 @@ public class MemberService {
 		this.repo = repo;
 	}
 	
-	public Member authenticateUser(Member member) {
-		Member info = repo.findByUserIdAndIsLeave(member.getUserId(),0);
+	public Member authenticateUser(Map<String,String> commandMap) {
+		Member info = repo.findByUserIdAndIsLeave(commandMap.get("userId"),0);
 		
-		if(!passwordEncoder.matches(member.getPassword(), info.getPassword())) {
+		if(!passwordEncoder.matches(commandMap.get("password"), info.getPassword())) {
 			return null;
 		}
 		

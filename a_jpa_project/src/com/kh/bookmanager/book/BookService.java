@@ -24,9 +24,9 @@ public class BookService {
 		}
 	}
 	
-	public List<Book> findBookAll(){
+	public List<Book> findBooksAll(){
 		try(Session session = getSession()){
-			return bookRepository.findBookAll(session);
+			return bookRepository.findBooksAll(session);
 		}
 	}
 	

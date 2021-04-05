@@ -8,7 +8,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.kh.bookmanager.rent.RentMaster;
+import com.kh.bookmanager.rent.Rent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +42,7 @@ public class Member implements Serializable {
 	//ToMany의 경우 default가 lazy 이기 때문에 npe 방지를 위해 빈 인스턴스를 생성해주는 것이 규약
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member") //즉시 로딩
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	private List<RentMaster> rentMasters = new ArrayList<RentMaster>();
+	private List<Rent> rentMasters = new ArrayList<Rent>();
 
 	public Member() {
 		
@@ -112,21 +112,21 @@ public class Member implements Serializable {
 		this.tell = tell;
 	}
 
-	public List<RentMaster> getRentMasters() {
+	public List<Rent> getRentMasters() {
 		return rentMasters;
 	}
 
-	public void setRentMasters(List<RentMaster> rentMasters) {
+	public void setRentMasters(List<Rent> rentMasters) {
 		this.rentMasters = rentMasters;
 	}
 
-	public RentMaster addRentMaster(RentMaster rentMaster) {
+	public Rent addRentMaster(Rent rentMaster) {
 		getRentMasters().add(rentMaster);
 		rentMaster.setMember(this);
 		return rentMaster;
 	}
 
-	public RentMaster removeRentMaster(RentMaster rentMaster) {
+	public Rent removeRentMaster(Rent rentMaster) {
 		getRentMasters().remove(rentMaster);
 		rentMaster.setMember(null);
 		return rentMaster;

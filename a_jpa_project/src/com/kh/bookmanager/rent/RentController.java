@@ -8,23 +8,19 @@ public class RentController {
 	
 	RentService rentService = new RentService();
 	
-	public List<RentMaster> searchRentList(String userId){
-		return null;		
+	public Rent findRent(long rmIdx){
+		return rentService.findRent(rmIdx);		
 	}
 	
-	public List<RentBook> searchRentBookList(String rmIdx){
-		return null;
+	public List<Rent> findRentsOnRent(String userId){
+		return rentService.findRentsOnRent(userId);
 	}
 	
-	public String registRent(List<Book> bookList, String userId) {
-		return null;
+	public boolean registRent(List<Book> bookList, String userId) {
+		return rentService.insertRentInfo(bookList, userId);
 	}
 	
-	public boolean returnBook(int rbIdx) {
-		return false;
-	}
-	
-	public boolean extendBook(int rbIdx) {
-		return false;
+	public boolean returnBook(Rent rent) {
+		return rentService.returnRentBook(rent);
 	}
 }
