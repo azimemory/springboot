@@ -1,6 +1,6 @@
 package com.kh.bookmanager.member;
 
-import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,8 +15,10 @@ public class MemberRepository {
 		return em.createQuery(fetchJoin).getResultList();
 	}
 	
-	public List<Member> findMemberByRegdate(EntityManager em, Date begin, Date end){	
-		String jpql = "from Member where regDate between :begin and :end";
+	public List<Member> findMemberByRegdate(EntityManager em, Calendar begin, Calendar end){	
+		String jpql = "from Member m "
+				+ " left join fetch m.rentMasters rm "
+				+ " where rm.regDate between :begin and :end";
 		//String fetchJoin = "select m from Member m join fetch m.rentMasters";
 		Query query = em.createQuery(jpql);
 		query.setParameter("begin", begin);

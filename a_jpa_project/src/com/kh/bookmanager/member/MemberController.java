@@ -1,6 +1,7 @@
 package com.kh.bookmanager.member;
 
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class MemberController {
@@ -16,7 +17,14 @@ public class MemberController {
 	}
 	
 	public List<Member> searchByRegDate(String begin, String end){
-		return memberService.findMemberByRegDate(Date.valueOf(begin), Date.valueOf(end));
+		
+		Calendar beginDate = Calendar.getInstance();
+		beginDate.setTime(Date.valueOf(begin));
+		
+		Calendar endDate = Calendar.getInstance();
+		endDate.setTime(Date.valueOf(end));
+		
+		return memberService.findMemberByRegDate(beginDate, endDate);
 	}
 	
 	public boolean join(Member member) {

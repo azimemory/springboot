@@ -48,7 +48,7 @@ public class MemberService {
 		return memberList;
 	}
 	
-	public List<Member> findMemberByRegDate(Date begin, Date end){
+	public List<Member> findMemberByRegDate(Calendar begin, Calendar end){
 		List<Member> memberList = null;
 		EntityManager em = emf.createEntityManager(); // 1. 영속성컨텍스트 생성
 		try {
