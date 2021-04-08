@@ -5,7 +5,6 @@ import java.util.Date;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -23,7 +22,7 @@ import com.kh.toy.common.exception.ToAlertException;
 
 @Component
 @EnableAsync  //해당 클래스에서 Async 어노테이션을 사용할 것을 등록
-public class MailSender {
+public class EmailSender {
 	
 	@Autowired 
 	JavaMailSender mailSender;

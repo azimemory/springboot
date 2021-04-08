@@ -16,7 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.kh.toy.common.code.Code;
-import com.kh.toy.common.mail.MailSender;
+import com.kh.toy.common.mail.EmailSender;
 
 @Service
 public class MemberService {
@@ -24,7 +24,7 @@ public class MemberService {
 	private final MemberRepository repo;
 	
 	@Autowired
-	MailSender mail;
+	EmailSender mail;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;

@@ -1,53 +1,51 @@
 package com.kh.toy.member;
 
-import java.sql.Date;
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import org.hibernate.annotations.ColumnDefault;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.*;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+//2차 캐시 적용
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Cacheable
-public class Member {
+public class Member implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	private String userId;
-	private String password;
 	private String email;
-	@ColumnDefault(value = "'MG01'")
 	private String grade;
-	private String tell;
-	@ColumnDefault("sysdate")
-	private Date regDate;
-	@ColumnDefault("sysdate")
-	private Date rentableDate;
+	@Column(columnDefinition = "number default 0")
 	private int isLeave;
+	private String password;
 	
+	@Column(columnDefinition = "date default sysdate")
+	@Temporal(TemporalType.DATE)
+	private Date regDate;
+	private String tell;
+
 	public Member() {
 		
 	}
 
 	public String getUserId() {
-		return userId;
+		return this.userId;
 	}
 
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
@@ -55,19 +53,27 @@ public class Member {
 	}
 
 	public String getGrade() {
-		return grade;
+		return this.grade;
 	}
 
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
 
-	public String getTell() {
-		return tell;
+	public int getIsLeave() {
+		return this.isLeave;
 	}
 
-	public void setTell(String tell) {
-		this.tell = tell;
+	public void setIsLeave(int isLeave) {
+		this.isLeave = isLeave;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public Date getRegDate() {
@@ -78,39 +84,11 @@ public class Member {
 		this.regDate = regDate;
 	}
 
-	public Date getRentableDate() {
-		return rentableDate;
+	public String getTell() {
+		return this.tell;
 	}
 
-	public void setRentableDate(Date rentableDate) {
-		this.rentableDate = rentableDate;
+	public void setTell(String tell) {
+		this.tell = tell;
 	}
-
-	public int getIsLeave() {
-		return isLeave;
-	}
-
-	public void setIsLeave(int isLeave) {
-		this.isLeave = isLeave;
-	}
-
-	@Override
-	public String toString() {
-		return "Member [userId=" + userId + ", password=" + password + ", email=" + email + ", grade=" + grade
-				+ ", tell=" + tell + ", regDate=" + regDate + ", rentableDate=" + rentableDate + ", isLeave=" + isLeave
-				+ "]";
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
