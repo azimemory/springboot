@@ -1,11 +1,10 @@
 package com.kh.toy.query_dsl;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 
-import org.hibernate.criterion.Projection;
 import static org.springframework.util.ObjectUtils.isEmpty;
+
 import com.kh.toy.book.Book;
 import com.kh.toy.book.QBook;
 import com.kh.toy.member.Member;
@@ -14,7 +13,6 @@ import com.kh.toy.rent.QRent;
 import com.kh.toy.rent.QRentBook;
 import com.kh.toy.rent.Rent;
 import com.kh.toy.rent.RentBook;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -131,6 +129,7 @@ public class QueryDSLRepositoryImpl implements QueryDSLRepositoryCustom{
 						.innerJoin(rb.rent,r)
 						.where(rb.state.eq("대출"))						
 					)).fetch();
+		
 		return members;
 	}
 

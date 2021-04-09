@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+   <persistence-unit name="a_jpa" transaction-type="RESOURCE_LOCAL">
+      <class>com.kh.bookmanager.member.Member</class>
+      <class>com.kh.bookmanager.rent.Rent</class>
+      <class>com.kh.bookmanager.rent.RentBook</class>
+      <class>com.kh.bookmanager.book.Book</class>
+      <properties>
+         <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+         <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+         <property name="javax.persistence.jdbc.user" value="jpa"/>
+         <property name="javax.persistence.jdbc.password" value="1234"/>
+         
+         <!-- create : 테이블이 없으면 생성, 변경된 점 반영 
+              create-drop : 기존 테이블 삭제, Entity 관계에 맞춰 테이블 새로 생성
+              drop : 테이블 삭제
+              none : ddl off                                                  -->
+         <property name="hibernate.hbm2ddl.auto" value="none"/>
+         
+         <property name="hibernate.show_sql" value="true"/>
+         <property name="hibernate.format_sql" value="true"/>
+         
+         <property name="hibernate.cache.use_second_level_cache" value="true"/>
+         <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory"/>
+         <property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
+         
+         <property name="hibernate.generate_statistics" value="true"/>
+      </properties>
+   </persistence-unit>
+</persistence>
