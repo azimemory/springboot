@@ -82,7 +82,7 @@ public class MemberController {
 	@GetMapping("idcheck")
 	@ResponseBody
 	public String confirmId(String userId) {
-		if(memberService.selectMemberById(userId)) {
+		if(memberService.selectMemberById(userId) != null) {
 			return "fail";
 		}
 		return "success";

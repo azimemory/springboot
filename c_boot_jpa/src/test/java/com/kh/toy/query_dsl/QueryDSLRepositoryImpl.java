@@ -13,6 +13,7 @@ import com.kh.toy.rent.QRent;
 import com.kh.toy.rent.QRentBook;
 import com.kh.toy.rent.Rent;
 import com.kh.toy.rent.RentBook;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -45,7 +46,7 @@ public class QueryDSLRepositoryImpl implements QueryDSLRepositoryCustom{
 		List<Rent> rents = 
 				queryFactory.select(r)
 				.from(r)
-				.where(r.title.startsWith("디디").or(r.isReturn.eq(true)))
+				.where(r.title.startsWith("디디").or(r.member.userId.eq("jpa")))
 				.fetch();
 		return rents;
 	}
@@ -76,21 +77,29 @@ public class QueryDSLRepositoryImpl implements QueryDSLRepositoryCustom{
 	}
 	
 	@Override
-	public List<RentBook> innerJoinTuple() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Tuple> innerJoinTuple() {
+		List<Tuple> rentBookTuple = 
+				queryFactory
+				.select(rb.rbIdx,rb.state)
+				.from(rb)
+				.innerJoin(rb.rent,r)
+				.where(r.member.userId.eq("test"))
+				.fetch();
+		
+		return rentBookTuple;
 	}
 
+	//연관관계가 없어도 join이이 가능하다.
 	@Override
-	public List<Member> thetaJoin() {
-		List<Member> members = 
+	public List<RentBook> thetaJoin() {
+		List<RentBook> rentBooks = 
 				queryFactory
-				.selectDistinct(m)
-				.from(m,r)
-				.where(r.member.userId.eq(m.userId)
-					  ,r.isReturn.eq(false))
+				.select(rb)
+				.from(b,rb)
+				.where(rb.book.bkIdx.eq(b.bkIdx)
+						,b.author.eq("황정은"))
 				.fetch();
-		return members;
+		return rentBooks;
 	}
 
 	@Override
@@ -133,6 +142,7 @@ public class QueryDSLRepositoryImpl implements QueryDSLRepositoryCustom{
 		return members;
 	}
 
+	//BooleanExpression는 null값이 쿼리에 포함될 경우 만들어지는 jpql에서 생략된다.
 	@Override
 	public List<Member> dynamicQuery(String keyword, String tell) {
 		List<Member> members = 
@@ -152,7 +162,7 @@ public class QueryDSLRepositoryImpl implements QueryDSLRepositoryCustom{
 			.selectFrom(b)
 			.where(
 					bookAmtGoe(book.getBookAmt())
-					,rentCntLoe(book.getRentCnt())
+				   ,rentCntLoe(book.getRentCnt())
 				  )
 			.fetch();
 		return books;

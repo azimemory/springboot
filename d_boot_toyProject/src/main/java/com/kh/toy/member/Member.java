@@ -11,8 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 //2차 캐시 적용
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY) 
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
 @Entity
 @DynamicInsert
 @DynamicUpdate

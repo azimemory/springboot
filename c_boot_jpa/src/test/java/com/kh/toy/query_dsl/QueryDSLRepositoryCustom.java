@@ -6,6 +6,7 @@ import com.kh.toy.book.Book;
 import com.kh.toy.member.Member;
 import com.kh.toy.rent.Rent;
 import com.kh.toy.rent.RentBook;
+import com.querydsl.core.Tuple;
 
 public interface QueryDSLRepositoryCustom {
 
@@ -22,10 +23,10 @@ public interface QueryDSLRepositoryCustom {
 	List<RentBook> innerJoinProjections();
 	
 	//innerJoin + tuple로 원하는 컬럼값만 추출 하기
-	List<RentBook> innerJoinTuple();
+	List<Tuple> innerJoinTuple();
 	
 	//thetaJoin : 연관관계가 없는 두 엔티티를 조인해서 검색
-	List<Member> thetaJoin();
+	List<RentBook> thetaJoin();
 	
 	//orderBy
 	List<Book> ordrBy();

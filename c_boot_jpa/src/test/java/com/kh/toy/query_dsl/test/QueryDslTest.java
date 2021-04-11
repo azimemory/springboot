@@ -1,5 +1,7 @@
 package com.kh.toy.query_dsl.test;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.kh.toy.book.Book;
 import com.kh.toy.query_dsl.QueryDSLRepository;
+import com.kh.toy.rent.RentBook;
 
 @SpringBootTest
 public class QueryDslTest {
@@ -45,9 +48,12 @@ public class QueryDslTest {
 	}
 	
 	@Test
-	@DisplayName("대출완료 상태인 대출건을 가진 모든 사용자")
+	@DisplayName("황정은 작가가 쓴 도서의 대출 내역")
 	public void thetaJoin() {
-		repo.thetaJoin();
+		List<RentBook> rentBooks = repo.thetaJoin();
+		for (RentBook rentBook : rentBooks) {
+			System.out.println(rentBook);
+		}
 	}
 	
 	@Test
@@ -78,9 +84,9 @@ public class QueryDslTest {
 	}
 	
 	@Test
-	@DisplayName("전화번호가 010-0000-1111 이면서 이메일이나 아이디가 test인 회원")
+	@DisplayName("이메일이나 아이디가 test이고 전화번호가 010-0112-0119인 회원")
 	public void dynamicQuery() {
-		repo.dynamicQuery("test","010-0000-1111");
+		System.out.println(repo.dynamicQuery("test",null));
 	}
 	
 	

@@ -2,6 +2,9 @@ package com.kh.toy.member;
 
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +34,9 @@ public class MemberService {
 	@Autowired
 	RestTemplate rt;
 	
+	@PersistenceContext
+	EntityManager em;
+	
 	public MemberService(MemberRepository repo) {
 		this.repo = repo;
 	}
@@ -46,8 +51,8 @@ public class MemberService {
 		return info;
 	}
 	
-	public boolean selectMemberById(String userId){	
-		return repo.existsById(userId);
+	public Member selectMemberById(String userId){	
+		return em.find(Member.class, userId);
 	}
 	
 	public void authenticateEmail(Member member, String sessionId) {
