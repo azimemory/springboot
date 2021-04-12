@@ -79,7 +79,7 @@ public class MemberController {
 	@GetMapping("join")
 	public void join() {}
 	
-	@GetMapping("idcheck")
+	@PostMapping("idcheck")
 	@ResponseBody
 	public String confirmId(String userId) {
 		if(memberService.selectMemberById(userId) != null) {

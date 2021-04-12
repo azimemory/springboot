@@ -75,6 +75,7 @@
 			<th:block th:case="${8}">(B)</th:block>
 			<th:block th:case="${7}">(C)</th:block>
 			<th:block th:case="${6}">(D)</th:block>
+			<th:block th:case="*">(불합격)</th:block>
 		</li>
 	</ul>	
 	<span th:if="${score.average >= 60}">결과 : 합격</span>

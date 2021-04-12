@@ -6,49 +6,13 @@
 </head>
 <body>
 	<h1>로그인</h1>
-	<span class="valid_info"></span><br>
-	<span class="tit">ID :</span><input type="text" name="userId" id="id"><br>
-	<span class="tit">PW :</span><input type="password" name="password" id="pw">
-	<button onclick="login()">로그인</button><br><br>
-	<a th:href="@{/member/join}">회원가입 하러가기</a>
-	
-	<script type="text/javascript" th:replace="fragments :: ajax-csrf-header"></script>
-	<script type="text/javascript" th:inline="javascript">
-	let login = () => {
-		const url = '/member/loginimpl';
-		let params = {};
-		params.username = id.value;
-		params.password = pw.value;
-        
-		//post방식으로 진행
-		//헤더 설정
-		let headerObj = getCsrfHeader();
-		headerObj.append("content-type","application/x-www-form-urlencoded");
-		
-		fetch(url,{
-			method:"post",
-			headers:headerObj,
-			body:urlEncodeForm(params)
-		})
-		.then(response => {
-			//200번대 응답코드라면
-			if(response.ok){
-				return response.text();
-			}else{
-				throw new AsyncResponseError(response.text());
-			}
-		})
-		.then(text => {
-			if(text == 'fail'){
-				document.querySelector('.valid_info').innerHTML = '아이디나 비밀번호를 확인하세요.';
-			}else if(text == 'success'){
-				location.href = "/index";
-			}
-		}).catch((error)=>{
-			error.alertMessage();
-		})
-	}
-	
-	</script>	
+	<form th:action="@{/member/loginimpl}" method="post">
+		<span th:if="${param.error}" class="valid_info" 
+			  th:text="아이디나 비밀번호를 확인하세요"></span><br>
+		<span class="tit">ID :</span><input type="text" name="userId" id="id"><br>
+		<span class="tit">PW :</span><input type="password" name="password" id="pw">
+		<button onclick="login()">로그인</button><br><br>
+		<a th:href="@{/member/join}">아이디가 없으신가요? 회원가입하고 행복해지세요</a>
+	</form>
 </body>
 </html>

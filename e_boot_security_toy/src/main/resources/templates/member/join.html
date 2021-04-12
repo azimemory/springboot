@@ -11,30 +11,32 @@
         <tr>
            <td>ID : </td>
            <td>
-           	  <input type="text" name="userId" id="id" size="10" required/>
+           	  <input type="text" name="userId" th:field="*{userId}" id="id" size="10" required/>
               <button type="button" onclick="idCheck()">check</button>
-              <span class="valid_info" id="id_check"></span>
+              <span  th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"
+              	class="valid_info" id="id_check"></span>
            </td>
         </tr>
         <tr>
            <td>PASSWORD : </td>
            <td>
            	  <input type="password" name="password" id="pw" required/>
-           	  <span id="pw_confirm" class="valid_info"></span>
+           	  <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+           	  		id="pw_confirm" class="valid_info"></span>
            </td>
         </tr>
         <tr>
            <td>휴대폰번호 : </td>
            <td>
            	  <input type="tel" name="tell" required/>
-           	  <span></span>
+           	  <span th:if="${#fields.hasErrors('tell')}" th:errors="*{tell}"></span>
            </td>
         </tr>
         <tr>
            <td>email : </td>
            <td>
            	  <input type="email" name="email" required/>
-           	  <span></span>
+           	  <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
            </td>
         </tr>
         <tr>
@@ -45,16 +47,19 @@
        </tr>
    </table>
    </form>
-   
+ 
+   <script type="text/javascript" th:replace="fragments :: ajax-csrf-header"></script>
    <script type="text/javascript">
    let idCheckFlg = false;
    let idCheck = () => {
 	   //사용자가 입력한 아이디
 	   //요소의 아이디속성이 있을 경우 해당 엘리먼트를 가져다가 사용할 수 있다.
 	   let userId = id.value;
+	   let headers = getCsrfHeader();
 	   if(userId){
 		   fetch("/member/idcheck?userId=" + userId,{
-			   method:"GET"
+			   headers:headers,
+			   method:"POST"
 		   })
 		   .then(response => response.text())
 		   .then(text =>{
