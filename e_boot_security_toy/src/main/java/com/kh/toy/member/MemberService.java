@@ -45,11 +45,11 @@ public class MemberService implements UserDetailsService{
 	}
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Member member = repo.findByUserIdAndIsLeave(username,0);
+	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		Member member = repo.findByUserIdAndIsLeave(userId,0);
 		
 		if(member==null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(userId);
         }
 		
 		return new MemberAccount(member);

@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe()
                 .userDetailsService(memberService);
         
-        http.csrf().ignoringAntMatchers("/mail");
+        http.csrf().ignoringAntMatchers("/mail/**");
     }
 }
 
