@@ -77,7 +77,7 @@ public class MemberController {
 	//반환형이 void일 경우 요청온 viewResolver에 등록된 prefix를 기준으로
 	//url과 같은 경로에 있는 jsp로 요청을 재지정한다.
 	@GetMapping("join")
-	public void join() {}
+	public void join(Model model, Member member) {}
 	
 	@PostMapping("idcheck")
 	@ResponseBody
