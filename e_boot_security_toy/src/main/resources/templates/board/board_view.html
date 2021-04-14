@@ -10,12 +10,12 @@
     <div class="desc_board">
       <div class="info" >
           <span>제목 : [[${board.title}]]</span>
-          <span th:text="|작성자 : ${board.userId}|"></span>
+          <span th:text="${board.member}? ${board.member.userId}:guest"></span>
           <span th:text="|등록일 : ${board.regDate}|"></span>
       </div>
      <div class="info">
      	 <ol>
-     	 	<li th:each="file : ${board.fileList}"  th:object="${file}"
+     	 	<li th:each="file : ${board.fileEntities}"  th:object="${file}"
      	 		th:onclick="downloadFile([[*{originFileName}]],[[*{renameFileName}]],[[*{savePath}]])">
      	 		<a>[[*{originFileName}]]</a> 
      	 	</li>
@@ -26,10 +26,10 @@
       </div>
       <div class="btn_section">
           <button onclick="submitData('list')"><span>목록</span></button>
-          <button th:unless="${session.userInfo == null || session.userInfo.userId != board.userId}"
+          <button th:if ="${board.member != null && #authentication.principal.username == board.member.userId}"
           		  th:onclick="submitData('modify?bdIdx=[(${board.bdIdx})]')"
           ><span>수정</span></button>
-          <button th:unless="${session.userInfo == null || session.userInfo.userId != board.userId}"
+          <button th:if="${board.member != null && #authentication.principal.username == board.member.userId}"
           		  th:onclick="submitData('delete?bdIdx=[(${board.bdIdx})]')"><span>삭제</span></button>
       </div>
    </div>

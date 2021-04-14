@@ -9,6 +9,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Type;
 
 //2차 캐시 적용
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
@@ -22,8 +23,9 @@ public class Member implements Serializable {
 	private String userId;
 	private String email;
 	private String grade;
-	@Column(columnDefinition = "number default 0")
-	private int isLeave;
+	@Column(columnDefinition = "number(1) default 0")
+	@Type(type="yes_no")
+	private boolean isLeave;
 	private String password;
 	
 	@Column(columnDefinition = "date default sysdate")
@@ -59,11 +61,11 @@ public class Member implements Serializable {
 		this.grade = grade;
 	}
 
-	public int getIsLeave() {
-		return this.isLeave;
+	public boolean isLeave() {
+		return isLeave;
 	}
 
-	public void setIsLeave(int isLeave) {
+	public void setLeave(boolean isLeave) {
 		this.isLeave = isLeave;
 	}
 

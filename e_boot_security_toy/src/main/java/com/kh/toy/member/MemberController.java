@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -131,12 +132,6 @@ public class MemberController {
 		return "member/login";
 	}
 	
-	@GetMapping("logout")
-	public String logout(HttpSession session) {
-		session.removeAttribute("userInfo");
-		return "redirect:/index";
-	}	
-	
 	@GetMapping("mypage")
 	public void myPage() {}
 	
@@ -154,9 +149,9 @@ public class MemberController {
 	}
 	
 	@GetMapping("leave")
-	public String leave(@SessionAttribute("userInfo") Member member){
-		if(member != null) {
-			memberService.updateMemberToLeave(member.getUserId());
+	public String leave(@AuthenticationPrincipal MemberAccount memberAccount){
+		if(memberAccount.isEnabled()) {
+			memberService.updateMemberToLeave(memberAccount.getUsername());
 		}
 		return "index/index";
 	}

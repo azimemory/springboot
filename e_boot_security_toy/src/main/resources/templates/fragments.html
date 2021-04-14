@@ -12,27 +12,31 @@
 				text-decoration: none;	
 				cursor:pointer;
 			}
-			
-			.gnb_top{
-				display: flex;
-				justify-content: space-between;
-			}
 		</style>
+		
+		<script type="text/javascript" th:inline="javascript">
+			window.onload = () => {
+				let formList = document.querySelectorAll('form');
+				let csrfTag = document.createElement('input');
+				csrfTag.type='hidden';
+				csrfTag.name= "[(${_csrf.headerName})]";
+				csrfTag.value="[(${_csrf.token})]";
+				
+				if(formList.length){
+					formList.forEach((e) =>{
+						e.prependChild(csrfTag);
+					})	
+				}
+			};
+		</script>
 	</th:block>
 </head>
 <body>
-<div class="gnb_top" th:fragment="gnb_top">
-	<a href="/">toyProject</a>
-	<div>
-		<a th:if="${session.userInfo == null}">login</a>
-		<a th:if="${session.userInfo != null}">logout</a>
-	</div>
-</div>
 
 <script type="text/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
 		let getCsrfHeader = () =>{
+			let csrfHeader = "[(${_csrf.headerName})]";
 			let csrfToken = "[(${_csrf.token})]";
-	        let csrfHeader = "[(${_csrf.headerName})]";
 	        let headerObj = new Headers();
 	        headerObj.append(csrfHeader,csrfToken);
 			return headerObj;

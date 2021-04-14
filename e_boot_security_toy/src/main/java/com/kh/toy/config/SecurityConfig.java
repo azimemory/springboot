@@ -1,13 +1,20 @@
 package com.kh.toy.config;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.multipart.support.MultipartFilter;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import com.kh.toy.member.MemberService;
 
@@ -21,6 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	this.memberService = memberService;
     }
     
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
+    }
+    
     //WebSecurity는 FilterChainProxy를 생성하는 필터입니다.
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -29,30 +41,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	 .mvcMatchers("/static/**")
     	 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
+    
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	
         http.authorizeRequests()
                 .mvcMatchers(HttpMethod.GET, "/member/login", "/member/join", "/member/idcheck").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/member/mailauth", "/mail", "/member/loginimpl","/member/idcheck").permitAll()
                 .antMatchers("/member/joinimpl/**").permitAll()             
                 .anyRequest().authenticated();
-
-        http.
-                csrf().ignoringAntMatchers("/member/login");
-
+       
         http.formLogin()
         		.loginProcessingUrl("/member/loginimpl")
+        		.usernameParameter("userId")
                 .loginPage("/member/login").permitAll()
                 .defaultSuccessUrl("/", true);
 
         http.logout()
+        		.logoutUrl("/member/logout")
                 .logoutSuccessUrl("/");
-
-        http.rememberMe()
-                .userDetailsService(memberService);
-        
-        http.csrf().ignoringAntMatchers("/mail/**");
+     
+        http.csrf()
+        	.ignoringAntMatchers("/mail/**");
     }
 }
 

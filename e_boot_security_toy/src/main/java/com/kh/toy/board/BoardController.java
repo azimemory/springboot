@@ -10,9 +10,11 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.toy.common.util.file.FileEntity;
 import com.kh.toy.member.Member;
+import com.kh.toy.member.MemberAccount;
 
 @Controller
 @RequestMapping("board")
@@ -46,20 +49,18 @@ public class BoardController {
 	public String boardList(@RequestParam(defaultValue = "1") int page 
 							,Model model) {
 		//jpa의 Page객체는 페이징이 0부터 시작... 하 리얼 개발자 새끼들...
-		model.addAllAttributes(boardService.selectBoardList(PageRequest.of(page-1, 5, Direction.DESC, "bdIdx")));
+		model.addAllAttributes(boardService.selectBoardList(PageRequest.of(page-1, 5, Direction.DESC, "regDate")));
 		return "board/board_list";
 	}
 	
 	//MultiPart 요청이 오면, File은 MultipartFile 객체로 게시글은 Board 객체로 바인드 해준다.
 	@PostMapping("upload")
 	public String uploadBoard(
-			  @RequestParam List<MultipartFile> files
-			, @SessionAttribute(name="userInfo",required = false) 
-			  Member member
+			 @RequestParam List<MultipartFile> files
+			, @AuthenticationPrincipal MemberAccount memberAccount			
 			, Board board) {
-		//로그인 여부에 따른 예외처리
-		String userId = member == null?"guest":member.getUserId();
-		board.setUserId(userId);
+		
+		board.setMember(memberAccount.getMember());
 		boardService.insertBoard(board, files);
 		return "redirect:/board/list";
 	}
@@ -67,10 +68,10 @@ public class BoardController {
 	//MultiPart 요청이 오면, File은 MultipartFile 객체로 게시글은 Board 객체로 바인드 해준다.
 	@GetMapping("modify")
 	public String modifyBoard(
-			 @SessionAttribute(name="userInfo") Member member
+			@AuthenticationPrincipal MemberAccount member			
 			, String bdIdx
 			, Model model) {
-		model.addAttribute("board",boardService.findBoardToModify(bdIdx, member.getUserId()));
+		model.addAttribute("board",boardService.findBoardToModify(bdIdx, member.getMember()));
 		return "/board/board_modify";
 	}
 	
@@ -78,21 +79,21 @@ public class BoardController {
 	public String modifyBoardImpl(
 			  @RequestParam List<MultipartFile> files
 			, @RequestParam(required = false) List<String> delFiles
-			, @SessionAttribute(name="userInfo") Member member
+			, @AuthenticationPrincipal MemberAccount member
 			, @RequestParam Map<String, String> commandMap
 			, Model model) {
 		
-		boardService.updateBoard(commandMap, delFiles, files, member.getUserId());
+		boardService.updateBoard(commandMap, delFiles, files, member.getMember().getUserId());
 		return "redirect:/board/detail?bdIdx=" + commandMap.get("bdIdx");
 	}
 	
 	@GetMapping("delete")
 	public String deleteBoardImpl(
 			  @RequestParam String bdIdx
-			, @SessionAttribute(name="userInfo") Member member
+			, @AuthenticationPrincipal MemberAccount memberAccount
 			, Model model) {
 		
-		boardService.deleteBoard(bdIdx);
+		boardService.deleteBoard(bdIdx, memberAccount.getMember());
 		return "redirect:/board/list";
 	}
 	

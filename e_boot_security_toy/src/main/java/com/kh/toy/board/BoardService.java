@@ -3,8 +3,6 @@ package com.kh.toy.board;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,23 +14,24 @@ import com.kh.toy.common.code.ErrorCode;
 import com.kh.toy.common.exception.ToAlertException;
 import com.kh.toy.common.util.file.FileEntity;
 import com.kh.toy.common.util.file.FileUtil;
-import com.kh.toy.common.util.jpa.EntityUtilsBuilder;
 import com.kh.toy.common.util.paging.Paging;
+import com.kh.toy.member.Member;
 
 @Service
 public class BoardService {
 	
-private BoardRepository repo;
+	private BoardRepository repo;
 	
 	public BoardService(BoardRepository repo) {
 		this.repo = repo;
 	}
 	
+	@Transactional
 	public void insertBoard(Board board, List<MultipartFile> files) {
 		if(!(files.size() == 1 && files.get(0).getOriginalFilename().equals(""))) {
 			//파일업로드를 위해 FileUtil.fileUpload() 호출
 			List<FileEntity> fileEntities = new FileUtil().fileUpload(files);
-			board.setFileList(fileEntities);
+			board.setFileEntities(fileEntities);
 			board = repo.save(board);
 		}
 	}
@@ -59,8 +58,8 @@ private BoardRepository repo;
 		return repo.findById(bdIdx).orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
 	}
 	
-	public Board findBoardToModify(String bdIdx, String userId) {
-		return repo.findBoardByBdIdxAndUserId(bdIdx,userId);
+	public Board findBoardToModify(String bdIdx, Member member) {
+		return repo.findBoardByBdIdxAndMember(bdIdx,member);
 	}
 	
 	@Transactional
@@ -72,8 +71,8 @@ private BoardRepository repo;
 								.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
 		
 		//board 엔티티에서 사용자가 삭제한 파일 제거 +  파일 삭제
-		boardEntity.getFileList().removeIf(file -> {
-			if(delFiles != null && delFiles.contains(file.getFlIdx())) {
+		boardEntity.getFileEntities().removeIf(file -> {
+			if(delFiles != null && delFiles.contains(file.getFileIdx())) {
 				fileUtil.deleteFile(file.getFullPath()+file.getRenameFileName());
 				return true;
 			}
@@ -81,18 +80,23 @@ private BoardRepository repo;
 		});
 		
 		List<FileEntity> fileEntitys = fileUtil.fileUpload(files); //수정할 때 추가한 파일 업로드
-		boardEntity.getFileList().addAll(fileEntitys); //board 엔티티에 파일내용 추가
+		boardEntity.getFileEntities().addAll(fileEntitys); //board 엔티티에 파일내용 추가
 	}
 
-	public void deleteBoard(String bdIdx) {
+	@Transactional
+	public void deleteBoard(String bdIdx, Member member) {
+		
 		Board boardEntity = repo.findById(bdIdx)
 							.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
 		
-		FileUtil fileUtil = new FileUtil();
-		for (FileEntity file : boardEntity.getFileList()) {
-			fileUtil.deleteFile(file.getFullPath()+file.getRenameFileName());
+		if(boardEntity.getMember().equals(member)) {
+			FileUtil fileUtil = new FileUtil();
+			for (FileEntity file : boardEntity.getFileEntities()) {
+				fileUtil.deleteFile(file.getFullPath()+file.getRenameFileName());
+				repo.delete(boardEntity);
+			}
+		}else {
+			throw new ToAlertException(ErrorCode.UNAUTHORIZED_PAGE);
 		}
-		
-		repo.delete(boardEntity);
 	}
 }

@@ -1,7 +1,6 @@
 package com.kh.toy.member;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,4 +22,14 @@ public class MemberAccount extends User{
 		super(member.getUserId(), member.getPassword(), AUTH);
 		this.member = member;
 	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	
 }

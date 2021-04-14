@@ -18,7 +18,7 @@ public enum ErrorCode {
 	CODE_404("존재하지 않는 경로입니다.");
 
 	public String msg;
-	public String url = "/index";
+	public String url = "/";
 	
 	//에러 발생 시 index로 이동
 	ErrorCode(String errMsg){

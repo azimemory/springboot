@@ -1,9 +1,13 @@
 package com.kh.toy.common.util.file;
 
-import java.sql.Date;
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -11,27 +15,44 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.kh.toy.common.code.Code;
 
-@Entity(name = "file_info")
+@Entity
 @DynamicInsert
 @DynamicUpdate
 public class FileEntity {
 	
 	@Id
-	@GenericGenerator(name="uuid", strategy = "uuid2")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@GeneratedValue(generator = "uuid")
-	private String flIdx;
+	private String fileIdx;
 	private String originFileName;
 	private String renameFileName;
 	private String savePath;
-	private String isDel;
-	Date regDate;
-
-	public String getFlIdx() {
-		return flIdx;
+	
+	@Column(columnDefinition = "date default sysdate")
+	@Temporal(TemporalType.DATE )
+	private Date regDate;
+	
+	@Column(columnDefinition = "number default 0")
+	private boolean isDel;
+	
+	public String getFullPath() {
+		return Code.UPLOAD + savePath;
+	}
+	
+	public String getFileIdx() {
+		return fileIdx;
 	}
 
-	public void setFlIdx(String flIdx) {
-		this.flIdx = flIdx;
+	public void setFileIdx(String fileIdx) {
+		this.fileIdx = fileIdx;
+	}
+
+	public boolean isDel() {
+		return isDel;
+	}
+
+	public void setDel(boolean isDel) {
+		this.isDel = isDel;
 	}
 
 	public String getOriginFileName() {
@@ -53,29 +74,13 @@ public class FileEntity {
 	public String getSavePath() {
 		return savePath;
 	}
-	
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}
-	
-	public String getIsDel() {
-		return isDel;
-	}
-	
-	public void setIsDel(String isDel) {
-		this.isDel = isDel;
-	}
-	
 	public Date getRegDate() {
 		return regDate;
 	}
-
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
 	}
-
-	public String getFullPath() {
-		return Code.UPLOAD+savePath;
-	}
-	
 }

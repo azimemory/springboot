@@ -21,17 +21,15 @@
   	    <table style="text-align: center" border="1">
 	       <thead>
 	           <tr>
-	               <th style="width: 10%; height:20%;"><span>날짜</span></th>
-	               <th style="width: 70%;"><span>제목</span></th>
+	               <th style="width: 80%;"><span>제목</span></th>
 	               <th style="width: 10%;"><span>작성자</span></th>
 	               <th style="width: 10%;"><span>등록일</span></th>
 	           </tr>
 	       </thead>
 	       <tbody>
 	           <tr th:each="board,status: ${blist}">
-	               <td th:text="${status.count}"></td>
-	               <td><a th:href="@{|/board/detail?bdIdx=${board.bdIdx}|}">[[${board.title}]]</a></td>
-	               <td th:text="${board.userId}"></td>
+	               <td><a th:href="@{/board/detail(bdIdx=${board.bdIdx})}">[[${board.title}]]</a></td>
+	               <td th:text="${board.member}? ${board.member.userId}:guest">GUEST</td>
 	               <td th:text="${board.regDate}"></td>
 	           </tr>
 	       </tbody>

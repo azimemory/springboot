@@ -16,8 +16,8 @@
 				</div>
 				<div class="info">
 		     	 <ol>
-		     	 	<li th:each="file : ${board.fileList}"  th:object="${file}"
-		     	 		th:onclick="addFileParameter([[*{flIdx}]],this)">
+		     	 	<li th:each="file : ${board.fileEntities}"  th:object="${file}"
+		     	 		th:onclick="addFileParameter([[*{fileIdx}]],this)">
 		     	 		<a>[[*{originFileName}]] <b>x</b></a> 
 		     	 	</li>
 		     	 </ol>

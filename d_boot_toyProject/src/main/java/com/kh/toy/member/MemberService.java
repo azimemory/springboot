@@ -81,7 +81,7 @@ public class MemberService {
 
 	public void updateMemberToLeave(String userId) {
 		Member member  = repo.findById(userId).get();
-		member.setIsLeave(1);
+		member.setLeave(true);
 	}
 	
 }

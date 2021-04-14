@@ -1,10 +1,7 @@
 package com.kh.toy.member;
 
-import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +43,7 @@ public class MemberService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		Member member = repo.findByUserIdAndIsLeave(userId,0);
+		Member member = repo.findByUserIdAndIsLeave(userId,false);
 		
 		if(member==null) {
             throw new UsernameNotFoundException(userId);
@@ -85,6 +82,6 @@ public class MemberService implements UserDetailsService{
 
 	public void updateMemberToLeave(String userId) {
 		Member member  = repo.findById(userId).get();
-		member.setIsLeave(1);
+		member.setLeave(true);
 	}
 }

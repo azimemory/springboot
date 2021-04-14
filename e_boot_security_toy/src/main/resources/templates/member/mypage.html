@@ -10,26 +10,20 @@
 		<table>
 			<tr>
 				<td>id</td>
-				<td th:text="${session.userInfo.userId}">
-					<input type="hidden" name="userId" value="${session.userInfo.userId}"/> 
+				<td th:text="${#authentication.principal.username}">
+					<input type="hidden" name="userId" th:value="${#authentication.principal.username}"/> 
 				</td>
 			</tr>
 			<tr>
 				<td>tell</td>
-				<td><input type="text" name="tell" th:value="${session.userInfo.tell}"/></td>
+				<td><input type="text" name="tell" th:value="${#authentication.principal.member.tell}"/></td>
 			</tr>
 			<tr>
 				<td>email</td>
-				<td><input type="text" name="email" th:value="${session.userInfo.email}"/></td>
+				<td><input type="text" name="email" th:value="${#authentication.principal.member.email}"/></td>
 			</tr>
 		</table>
 		<button>수정</button>
 	</form>
-	</script>
-	
-	
-	
-	
-	
 </body>
 </html>
