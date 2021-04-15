@@ -2,11 +2,8 @@ package com.kh.toy.common.util.jpa;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.beanutils.BeanUtilsBean;
-
 import com.kh.toy.common.code.ErrorCode;
 import com.kh.toy.common.exception.ToAlertException;
 

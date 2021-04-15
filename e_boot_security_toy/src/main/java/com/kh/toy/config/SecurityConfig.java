@@ -1,5 +1,7 @@
 package com.kh.toy.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.multipart.support.MultipartFilter;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
@@ -22,10 +26,12 @@ import com.kh.toy.member.MemberService;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-    private final MemberService memberService;
+	private final MemberService memberService;
+    private final DataSource dataSource;
     
-    public SecurityConfig(MemberService memberService) {
+    public SecurityConfig(MemberService memberService,  DataSource dataSource) {
     	this.memberService = memberService;
+    	this.dataSource = dataSource;
     }
     
     @Bean
@@ -64,6 +70,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      
         http.csrf()
         	.ignoringAntMatchers("/mail/**");
+        
+        http.rememberMe()
+        	.userDetailsService(memberService)
+        	.tokenRepository(tokenRepository());
+    }
+    
+    @Bean
+    public PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
     }
 }
 
