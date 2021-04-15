@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.logout()
         		.logoutUrl("/member/logout")
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/index");
      
         http.csrf()
         	.ignoringAntMatchers("/mail/**");
