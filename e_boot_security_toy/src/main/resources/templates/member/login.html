@@ -10,7 +10,9 @@
 		<span th:if="${param.error}" class="valid_info">아이디나 비밀번호를 확인하세요</span><br>
 		<span class="tit">ID :</span><input type="text" name="userId" id="id"><br>
 		<span class="tit">PW :</span><input type="password" name="password" id="pw">
-		<button onclick="login()">로그인</button><br><br>
+		<button onclick="login()">로그인</button>
+		<input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me" checked>
+        <label class="form-check-label" for="rememberMe" >로그인 유지</label><br>
 		<a th:href="@{/member/join}">아이디가 없으신가요? 회원가입하고 행복해지세요</a>
 	</form>
 </body>
