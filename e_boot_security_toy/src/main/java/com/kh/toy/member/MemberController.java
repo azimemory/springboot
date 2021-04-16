@@ -119,7 +119,7 @@ public class MemberController {
 			,@SessionAttribute("persistInfo")Member persistInfo 
 									  , Model model) {
 		if(!session.getId().equals(sessionId)) {
-			throw new ToAlertException(ErrorCode.EXPRIATION_AUTH);
+			throw new ToAlertException(ErrorCode.EXPIRATION_AUTH);
 		}
 		
 		memberService.insertMember(persistInfo);

@@ -3,7 +3,7 @@ package com.kh.toy.common.code;
 public enum ErrorCode {
 	
 	UNAUTHORIZED_PAGE("접근 권한이 없는 페이지 입니다."),
-	EXPRIATION_AUTH("이미 만료된 인증입니다."),
+	EXPIRATION_AUTH("이미 만료된 인증입니다."),
 
 	NON_EXIST_ARTICLE("존재하지 않는 게시물입니다."),
 	NON_EXIST_USER("존재하지 않는 사용자입니다."),
