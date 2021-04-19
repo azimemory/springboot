@@ -8,16 +8,48 @@ import javax.persistence.Id;
 
 @Entity
 public class PersistentLogins {
-    @Id
-    @Column(length = 64)
-    private String series;
+	@Id
+	@Column(columnDefinition = "varchar2(64 char)")
+	private String series;
+	
+	@Column(columnDefinition = "varchar2(64 char) not null")
+	private String username;
+	
+	@Column(columnDefinition = "varchar2(64 char) not null")
+	private String token;
+	
+	@Column(columnDefinition = "timestamp not null")
+	private LocalDateTime last_used;
 
-    @Column(nullable = false, length = 64)
-    private String username;
+	public String getSeries() {
+		return series;
+	}
 
-    @Column(nullable = false, length = 64)
-    private String token;
+	public void setSeries(String series) {
+		this.series = series;
+	}
 
-    @Column(name = "last_used",nullable = false,length = 64)
-    private LocalDateTime lastUsed;
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public LocalDateTime getLast_used() {
+		return last_used;
+	}
+
+	public void setLast_used(LocalDateTime last_used) {
+		this.last_used = last_used;
+	}
 }

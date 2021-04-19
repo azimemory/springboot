@@ -55,7 +55,7 @@ public class BoardService {
 	}
 
 	public Board selectBoardDetail(String bdIdx) {
-		return repo.findById(bdIdx).orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
+		return repo.findById(bdIdx).orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST));
 	}
 	
 	public Board findBoardToModify(String bdIdx, Member member) {
@@ -68,7 +68,7 @@ public class BoardService {
 		
 		//영속성 컨택스트에서 게시글 정보를 받아온다.
 		Board boardEntity = repo.findById(commandMap.get("bdIdx"))
-								.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
+								.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST));
 		
 		//board 엔티티에서 사용자가 삭제한 파일 제거 +  파일 삭제
 		boardEntity.getFileEntities().removeIf(file -> {
@@ -87,7 +87,7 @@ public class BoardService {
 	public void deleteBoard(String bdIdx, Member member) {
 		
 		Board boardEntity = repo.findById(bdIdx)
-							.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST_ARTICLE));
+							.orElseThrow(()-> new ToAlertException(ErrorCode.NON_EXIST));
 		
 		if(boardEntity.getMember().equals(member)) {
 			FileUtil fileUtil = new FileUtil();

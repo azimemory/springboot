@@ -34,6 +34,14 @@ public class BoardController {
 		this.boardService = boardService;
 	}
 	
+	@GetMapping("list")
+	public String boardList(@RequestParam(defaultValue = "1") int page 
+							,Model model) {
+		//jpa의 Page객체는 페이징이 0부터 시작... 하 리얼 개발자 새끼들...
+		model.addAllAttributes(boardService.selectBoardList(PageRequest.of(page-1, 5, Direction.DESC, "regDate")));
+		return "board/board_list";
+	}
+	
 	@GetMapping("detail")
 	public String boardDetail(String bdIdx, Model model) {
 		model.addAttribute("board",boardService.selectBoardDetail(bdIdx));
@@ -45,16 +53,8 @@ public class BoardController {
 		return "board/board_form";
 	}
 	
-	@GetMapping("list")
-	public String boardList(@RequestParam(defaultValue = "1") int page 
-							,Model model) {
-		//jpa의 Page객체는 페이징이 0부터 시작... 하 리얼 개발자 새끼들...
-		model.addAllAttributes(boardService.selectBoardList(PageRequest.of(page-1, 5, Direction.DESC, "regDate")));
-		return "board/board_list";
-	}
-	
 	//MultiPart 요청이 오면, File은 MultipartFile 객체로 게시글은 Board 객체로 바인드 해준다.
-	@PostMapping("upload")
+	@PostMapping("form")
 	public String uploadBoard(
 			 @RequestParam List<MultipartFile> files
 			, @AuthenticationPrincipal MemberAccount memberAccount			
