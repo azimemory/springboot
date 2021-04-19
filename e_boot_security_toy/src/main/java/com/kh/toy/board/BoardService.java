@@ -30,12 +30,10 @@ public class BoardService {
 	
 	@Transactional
 	public void saveBoard(Board board, List<MultipartFile> files) {
-		if(!(files.size() == 1 && files.get(0).getOriginalFilename().equals(""))) {
-			//파일업로드를 위해 FileUtil.fileUpload() 호출
-			List<FileEntity> fileEntities = new FileUtil().fileUpload(files);
-			board.setFileEntities(fileEntities);
-			board = repo.save(board);
-		}
+		//파일업로드를 위해 FileUtil.fileUpload() 호출
+		List<FileEntity> fileEntities = new FileUtil().fileUpload(files);
+		board.setFileEntities(fileEntities);
+		board = repo.save(board);
 	}
 
 	public Map<String, Object> findBoardList(PageRequest page) {
