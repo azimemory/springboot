@@ -14,14 +14,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.toy.common.util.file.FileEntity;
-import com.kh.toy.member.Member;
 import com.kh.toy.member.MemberAccount;
 
 @Controller
@@ -38,13 +35,13 @@ public class BoardController {
 	public String boardList(@RequestParam(defaultValue = "1") int page 
 							,Model model) {
 		//jpa의 Page객체는 페이징이 0부터 시작... 하 리얼 개발자 새끼들...
-		model.addAllAttributes(boardService.selectBoardList(PageRequest.of(page-1, 5, Direction.DESC, "regDate")));
+		model.addAllAttributes(boardService.findBoardList(PageRequest.of(page-1, 5, Direction.DESC, "regDate")));
 		return "board/board_list";
 	}
 	
 	@GetMapping("detail")
 	public String boardDetail(String bdIdx, Model model) {
-		model.addAttribute("board",boardService.selectBoardDetail(bdIdx));
+		model.addAttribute("board",boardService.findBoardDetail(bdIdx));
 		return "board/board_view";
 	}
 	
@@ -56,12 +53,12 @@ public class BoardController {
 	//MultiPart 요청이 오면, File은 MultipartFile 객체로 게시글은 Board 객체로 바인드 해준다.
 	@PostMapping("form")
 	public String uploadBoard(
-			 @RequestParam List<MultipartFile> files
+			  @RequestParam List<MultipartFile> files
 			, @AuthenticationPrincipal MemberAccount memberAccount			
 			, Board board) {
 		
 		board.setMember(memberAccount.getMember());
-		boardService.insertBoard(board, files);
+		boardService.saveBoard(board, files);
 		return "redirect:/board/list";
 	}
 	
@@ -79,11 +76,11 @@ public class BoardController {
 	public String modifyBoardImpl(
 			  @RequestParam List<MultipartFile> files
 			, @RequestParam(required = false) List<String> delFiles
-			, @AuthenticationPrincipal MemberAccount member
-			, @RequestParam Map<String, String> commandMap
+			, @AuthenticationPrincipal MemberAccount memberAccount
+			, @RequestParam Map<String, Object> commandMap
 			, Model model) {
 		
-		boardService.updateBoard(commandMap, delFiles, files, member.getMember().getUserId());
+		boardService.updateBoard(commandMap, delFiles, files, memberAccount.getMember());
 		return "redirect:/board/detail?bdIdx=" + commandMap.get("bdIdx");
 	}
 	
@@ -94,7 +91,9 @@ public class BoardController {
 			, Model model) {
 		
 		boardService.deleteBoard(bdIdx, memberAccount.getMember());
-		return "redirect:/board/list";
+		model.addAttribute("msg", "게시글 삭제가 완료되었습니다.");
+		model.addAttribute("url", "/board/list");
+		return "common/result";
 	}
 	
 	//파일 다운로드를 진행하기 위해 response의 contentsType을 지정해야한다.

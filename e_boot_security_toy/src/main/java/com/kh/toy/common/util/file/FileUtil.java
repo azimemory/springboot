@@ -78,11 +78,10 @@ public class FileUtil {
 		}
 	}
 	
-	public void deleteFile(String path) {
+	public void deleteFile(String fullPath, String fileName) {
 		//지정된 경로의 파일 객체를 생성
-		File file = new File(path);
+		File file = new File(fullPath + fileName);
 		//delete() 메서드로 파일을 삭제
 		file.delete();
 	}
-
 }

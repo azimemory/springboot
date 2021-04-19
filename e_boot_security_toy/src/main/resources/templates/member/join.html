@@ -5,7 +5,8 @@
 	<link rel="stylesheet" href="/css/member.css" />
 </head>
 <body>
- <h1>회원 가입 양식</h1>
+	<header th:replace="fragments :: flg_header"></header>
+ 	<h1>회원 가입 양식</h1>
     <form th:action="@{/member/mailauth}" method="post" th:object="${member}" id="frm_join">
      <table>
         <tr>
@@ -30,14 +31,14 @@
            <td>휴대폰번호 : </td>
            <td>
            	  <input type="tel" id="tell" name="tell" th:field="*{tell}" required/>
-           	  <span th:if="${#fields.hasErrors('tell')}" th:errors="*{tell}"></span>
+           	  <span th:if="${#fields.hasErrors('tell')}" th:errors="*{tell}" class="valid_info"></span>
            </td>
         </tr>
         <tr>
            <td>email : </td>
            <td>
            	  <input type="email" id="email" name="email" th:field="*{email}" required/>
-           	  <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+           	  <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="valid_info"></span>
            </td>
         </tr>
         <tr>

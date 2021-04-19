@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<th:block th:insert="fragments :: head"/>
+<th:block th:insert="fragments :: flg_head"/>
 <link rel="stylesheet" href="/css/member.css" />
 </head>
 <body>
+	<header th:replace="fragments :: flg_header"></header>
 	<h1>MyPage</h1>
 	<form th:action="@{/member/modify}" method="post">
 		<table>
 			<tr>
 				<td>id</td>
-				<td th:text="${#authentication.principal.username}">
-					<input type="hidden" name="userId" th:value="${#authentication.principal.username}"/> 
-				</td>
+				<td th:text="${#authentication.name}"></td>
 			</tr>
 			<tr>
 				<td>tell</td>
-				<td><input type="text" name="tell" th:value="${#authentication.principal.member.tell}"/></td>
+				<td><input type="text" name="tell" th:value="${#authentication.principal.tell}"/></td>
 			</tr>
 			<tr>
 				<td>email</td>
-				<td><input type="text" name="email" th:value="${#authentication.principal.member.email}"/></td>
+				<td><input type="text" name="email" th:value="${#authentication.principal.email}"/></td>
 			</tr>
 		</table>
 		<button>수정</button>

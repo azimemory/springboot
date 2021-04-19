@@ -34,7 +34,7 @@ public class Board {
 	private int isDel;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<FileEntity> fileList;
+	private List<FileEntity> fileEntities;
 	
 	public String getBdIdx() {
 		return bdIdx;
@@ -84,18 +84,18 @@ public class Board {
 		this.isDel = isDel;
 	}
 
-	public List<FileEntity> getFileList() {
-		return fileList;
+	public List<FileEntity> getFileEntities() {
+		return fileEntities;
 	}
 
-	public void setFileList(List<FileEntity> fileList) {
-		this.fileList = fileList;
+	public void setFileEntities(List<FileEntity> fileEntities) {
+		this.fileEntities = fileEntities;
 	}
 
 	@Override
 	public String toString() {
 		return "Board [bdIdx=" + bdIdx + ", userId=" + userId + ", regDate=" + regDate + ", title=" + title
-				+ ", content=" + content + ", isDel=" + isDel + ", fileList=" + fileList + "]";
+				+ ", content=" + content + ", isDel=" + isDel + ", fileEntities=" + fileEntities + "]";
 	}
 
 	

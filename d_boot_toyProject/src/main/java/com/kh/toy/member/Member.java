@@ -24,7 +24,6 @@ public class Member implements Serializable {
 	private String email;
 	private String grade;
 	@Column(columnDefinition = "number(1) default 0")
-	@Type(type="yes_no")
 	private boolean isLeave;
 	private String password;
 	

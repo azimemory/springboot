@@ -6,6 +6,7 @@
 </head>
 <body>
 <div class="content">
+	<header th:replace="fragments :: flg_header"></header>
 	<h2 class="tit">*게시판</h2>
 	<div class="desc_board">
 		<form th:action="@{/board/modify}" method="post" enctype="multipart/form-data">

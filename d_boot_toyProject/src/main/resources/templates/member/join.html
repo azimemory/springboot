@@ -5,8 +5,9 @@
 	<link rel="stylesheet" href="/css/member.css" />
 </head>
 <body>
- <h1>회원 가입 양식</h1>
-    <form th:action="@{/member/mailauth}" method="post" id="frm_join">
+	<header th:replace="fragments :: flg_header"></header>
+ 	<h1>회원 가입 양식</h1>
+    <form th:action="@{/member/mailauth}" method="post" th:object="${member}" id="frm_join">
      <table>
         <tr>
            <td>ID : </td>
@@ -20,21 +21,22 @@
            <td>PASSWORD : </td>
            <td>
            	  <input type="password" name="password" id="pw" required/>
-           	  <span id="pw_confirm" class="valid_info"></span>
+           	  <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+           	  		id="pw_confirm" class="valid_info"></span>
            </td>
         </tr>
         <tr>
            <td>휴대폰번호 : </td>
            <td>
            	  <input type="tel" name="tell" required/>
-           	  <span></span>
+           	  <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="valid_info"></span>
            </td>
         </tr>
         <tr>
            <td>email : </td>
            <td>
            	  <input type="email" name="email" required/>
-           	  <span></span>
+           	  <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="valid_info"></span>
            </td>
         </tr>
         <tr>

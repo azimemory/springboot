@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="/css/member.css" />
 </head>
 <body>
+	<header th:replace="fragments :: flg_header"></header>
 	<h1>로그인</h1>
 	<form th:action="@{/member/loginimpl}" method="post">
 		<span th:if="${param.error}" class="valid_info">아이디나 비밀번호를 확인하세요</span><br>

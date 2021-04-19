@@ -42,7 +42,7 @@ public class MemberService {
 	}
 	
 	public Member authenticateUser(Map<String,String> commandMap) {
-		Member info = repo.findByUserIdAndIsLeave(commandMap.get("userId"),0);
+		Member info = repo.findByUserIdAndIsLeave(commandMap.get("userId"),false);
 		
 		if(!passwordEncoder.matches(commandMap.get("password"), info.getPassword())) {
 			return null;

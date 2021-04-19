@@ -41,19 +41,29 @@ import com.kh.toy.common.util.jpa.EntityUtilsBuilder;
 //@ResponseBody : 응답바디에 직접 데이터를 작성
 import com.kh.toy.member.validator.MemberValidator;
 
-//webDataBinder : Controller의 파라미터에 데이터를 바인드 해주는 객체
-//@RequestParam
-//@RequestHeader
-//@CookieValue
-//@PathVariable
-//@ModelAttribute
+//1. 해당 클래스를 applicationContext에 빈으로 등록
+//2. Controller와 관련된 annotation을 사용할 수 있게 해준다.
+//	 @RequestMapping : 컨트롤러의 메서드와 매핑시킬 요청 url을 지정, http method 상관없음
+//	 @GetMapping : 컨트롤러의 메서드와 매핑시킬 요청 url을 지정 get method만 매핑
+//   @PostMapping : 컨트롤러의 메서드와 매핑시킬 요청 url을 지정 post method만 매핑
+//	 @RequestParam : 요청 파라미터를 컨트롤러 메서드의 매개변수에 바인드
+//				FormHttpMessageConverter가 동작, Content-type : form-url-encoded	
+//				속성 >> name : 요청파라미터명, 컨트롤러메서드의 매개변수명과 요청파라미터명이 같으면 생략 가능
+//						required : 필수 여부 default : true
+//						defaultValue : 파라미터가 없거나, 빈값이 넘어왔을 때 세팅할 기본 값
+//						value : name alias, ex) @RequestParam("userId")
+//	 @RequestBody : json포멧으로 넘어온 요청바디를 읽어서 자바의 객체에 바인드
+//				MappingJacksonHttpMessageConverter가 동작 Content-type : application/json
+//	 @ModelAttribute : 요청 파라미터를 VO에 바인드, VO에 바인드함과 동시에 Model에 VO를 담는다.
+//	 @RequestHeader : 요청해더를 컨트롤러의 매개변수에 바인드
+//	 @SessionAttribute : 원하는 Session의 속성을 컨트롤러의 매개변수에 바인드
+//	 @CookieValue : 원하는 Cookie의 값을 컨트롤러의 매개변수에 바인드
+//	 @PathVariable : url 템플릿에 담긴 파라미터값을 컨트롤러의 매개변수에 바인드
+//   @ResponseBody : 컨트롤러의 메서드 위에 작성, 메서드가 반환하는 값을 응답바디에 직접 넣어준다.
 
-//HttpEntity : Headers, body, status 를 가지고 있는 HTTP 메세지 관리 객체
-//RequetEntity : HttpEntity를 상속, Spring에서 요청과 관련된 정보를 저장하는 Entity
-//ResponseEntity : HttpEntity를 상속, Spring에서 응답과 관련된 정보를 저장하는 Entity
-//HttpSession : Spring에서 Session과 관련된 작업을 수행하는 객체
-// *** HttpServletRequest와 HttpServletResponse 같은 Servlet 객체를 Controller의 파라미터를 통해 전달 받을 수 있다.
-//	   Servlet 객체를 통해서 Request와 Response를 관리할 수 있지만, 이왕이면 Spring이 제공해주는 클래스를 사용하는 것이 더 바람직하다.
+//*** Servlet 객체(HttpServletRequest, HttpServletResponse, HttpSession) 들을
+// 컨트롤러 메서드의 매개변수로 전달받을 수 있다.
+// HttpEntity, RequestEntity, ResponseEntity
 
 @Controller
 @RequestMapping("member")
@@ -90,7 +100,8 @@ public class MemberController {
 	}
 	
 	@PostMapping("mailauth")
-	public String authenticateEmail(@Valid Member member
+	public String authenticateEmail
+					(@Valid Member member
 					, Errors error //반드시 Errors 변수를 @Valid 변수 바로 뒤에 작성
 					, HttpSession session
 					, Model model) {
@@ -114,15 +125,16 @@ public class MemberController {
 	//@PathVariable : 동적 url의 패스변수값을 받을 변수 앞에 작성
 	@GetMapping("joinimpl/{sessionId}")
 	public String joinImpl(
-			@PathVariable("sessionId") String sessionId
-									  , HttpSession session
-			,@SessionAttribute("persistInfo")Member persistInfo 
-									  , Model model) {
+						  @PathVariable("sessionId") String sessionId
+						 , HttpSession session
+						 ,@SessionAttribute("persistInfo")Member persistInfo 
+						  , Model model) {
+		
 		if(!session.getId().equals(sessionId)) {
 			throw new ToAlertException(ErrorCode.EXPIRATION_AUTH);
 		}
 		
-		memberService.insertMember(persistInfo);
+		memberService.saveMember(persistInfo);
 		session.removeAttribute("persistInfo");
 		return "member/login";
 	}
@@ -137,12 +149,14 @@ public class MemberController {
 	
 	@PostMapping("modify")
 	public String modify(@RequestParam Map<String,Object> commandMap
-						,@SessionAttribute("userInfo") Member userInfo){
+						,@AuthenticationPrincipal MemberAccount memberAccount){
 		
+		Member userInfo = memberAccount.getMember();
 		userInfo = new EntityUtilsBuilder<Member>()
 				.entity(userInfo)
 				.map(commandMap)
-				.build().mergeEntityWithMap();
+				.build()
+				.mergeEntityWithMap();
 		
 		memberService.updateMember(userInfo);
 		return "member/mypage";

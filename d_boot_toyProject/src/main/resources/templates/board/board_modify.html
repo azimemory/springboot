@@ -6,6 +6,7 @@
 </head>
 <body>
 <div class="content">
+	<header th:replace="fragments :: flg_header"></header>
 	<h2 class="tit">*게시판</h2>
 	<div class="desc_board">
 		<form th:action="@{/board/modify}" method="post" enctype="multipart/form-data">
@@ -16,8 +17,8 @@
 				</div>
 				<div class="info">
 		     	 <ol>
-		     	 	<li th:each="file : ${board.fileList}"  th:object="${file}"
-		     	 		th:onclick="addFileParameter([[*{flIdx}]],this)">
+		     	 	<li th:each="file : ${board.fileEntities}"  th:object="${file}"
+		     	 		th:onclick="addFileParameter([[*{fileIdx}]],this)">
 		     	 		<a>[[*{originFileName}]] <b>x</b></a> 
 		     	 	</li>
 		     	 </ol>

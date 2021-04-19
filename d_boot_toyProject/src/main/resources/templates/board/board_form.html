@@ -5,7 +5,8 @@
 	<link rel="stylesheet" href="/css/board.css" />
 </head>
 <body>
-<div class="content">
+	<header th:replace="fragments :: flg_header"></header>
+	<div class="content">
 	<h2 class="tit">*게시판</h2>
 	<div class="desc_board">
 		<form th:action="@{/board/upload}" method="post" enctype="multipart/form-data">

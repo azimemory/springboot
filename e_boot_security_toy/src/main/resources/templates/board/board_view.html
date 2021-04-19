@@ -6,11 +6,12 @@
 </head>
 <body>
 <div class="content">   
+	<header th:replace="fragments :: flg_header"></header>
     <h2 class="tit">*게시판</h2>
     <div class="desc_board">
       <div class="info" >
           <span>제목 : [[${board.title}]]</span>
-          <span th:text="${board.member}? ${board.member.userId}:guest"></span>
+          <span th:text="${board.member}? |작성자 : ${board.member.userId}|:|작성자 : guest|"></span>
           <span th:text="|등록일 : ${board.regDate}|"></span>
       </div>
      <div class="info">

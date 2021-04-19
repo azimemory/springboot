@@ -7,5 +7,5 @@ import com.kh.toy.member.Member;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, String> {
-	public Board findBoardByBdIdxAndMember(String bdIdx, Member member);
+	public Board findByBdIdxAndMember(String bdIdx, Member member);
 }

@@ -23,27 +23,24 @@ import com.kh.toy.common.mail.EmailSender;
 @Service
 public class MemberService implements UserDetailsService{
 
-	private final MemberRepository repo;
+	private final MemberRepository memberRepository;
 	
 	@Autowired
 	EmailSender mail;
-	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
-	
 	@Autowired
-	RestTemplate rt;
-	
+	RestTemplate restTemplate;
 	@PersistenceContext
 	EntityManager em;
 	
-	public MemberService(MemberRepository repo) {
-		this.repo = repo;
+	public MemberService(MemberRepository memberRepository) {
+		this.memberRepository = memberRepository;
 	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		Member member = repo.findByUserIdAndIsLeave(userId,false);
+		Member member = memberRepository.findByUserIdAndIsLeave(userId,false);
 		
 		if(member==null) {
             throw new UsernameNotFoundException(userId);
@@ -66,22 +63,22 @@ public class MemberService implements UserDetailsService{
 		body.add("userId",member.getUserId());
 		body.add("sessionId",sessionId);
 		
-		HttpEntity entity = new HttpEntity(body,header);
-		ResponseEntity<String> re = rt.exchange(Code.DOMAIN+"/mail", HttpMethod.POST,entity, String.class);
+		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body,header);
+		ResponseEntity<String> re = restTemplate.exchange(Code.DOMAIN+"/mail", HttpMethod.POST, entity, String.class);
 		mail.sendEmail(member.getEmail(), "회원가입을 축하합니다.", re.getBody());
 	}
 	
-	public void insertMember(Member member) {
+	public void saveMember(Member member) {
 		member.setPassword(passwordEncoder.encode(member.getPassword()));
-		repo.save(member);
+		memberRepository.save(member);
 	}
 	
 	public void updateMember(Member member) {
-		
+		memberRepository.save(member);
 	}
 
 	public void updateMemberToLeave(String userId) {
-		Member member  = repo.findById(userId).get();
-		member.setLeave(true);
+		Member member  = memberRepository.findById(userId).get();
+		member.setIsLeave(true);
 	}
 }

@@ -12,26 +12,46 @@
 				text-decoration: none;	
 				cursor:pointer;
 			}
+			
+			/* header 영역 */
+			.header-section{
+				display:flex;
+				justify-content:space-between;
+				align-items:center;
+				width:100%;
+				height:5vh;
+				background-color: white;
+			}
+			
+			.header-section>*{
+				display:flex;
+				align-items:center;
+				width:30%;
+			}
+			
+			.wrap_user{
+				width:15%;
+				justify-content: space-around;
+				font-size:1.5vw;
+			}
 		</style>
-		
-		<script type="text/javascript" th:inline="javascript">
-			window.onload = () => {
-				let formList = document.querySelectorAll('form');
-				let csrfTag = document.createElement('input');
-				csrfTag.type='hidden';
-				csrfTag.name= "[(${_csrf.headerName})]";
-				csrfTag.value="[(${_csrf.token})]";
-				
-				if(formList.length){
-					formList.forEach((e) =>{
-						e.prependChild(csrfTag);
-					})	
-				}
-			};
-		</script>
 	</th:block>
 </head>
 <body>
+
+<header class="header-section" th:fragment="flg_header">
+		<div class="wrap_top-logo">
+			<a class="top-logo-text" th:href="@{/}">PCLASS</a>
+		</div>
+		<div sec:authorize="!isAuthenticated()" class="wrap_user">
+			<a class="top_user top_join" th:href="@{/member/login}">login</a>
+			<a class="top_user" th:href="@{/member/join}">join</a>
+		</div>
+		<div sec:authorize="isAuthenticated()" class="wrap_user">
+			<a class="top_user top_join" th:href="@{/member/logout}">logout</a>
+			<a class="top_user" th:href="@{/member/mypage}">mypage</a>
+		</div>
+</header>
 
 <script type="text/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
 		let getCsrfHeader = () =>{
@@ -42,10 +62,6 @@
 			return headerObj;
 		}
 </script>
-
-
-
-
 
 </body>
 </html>

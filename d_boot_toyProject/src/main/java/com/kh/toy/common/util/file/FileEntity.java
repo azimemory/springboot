@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.kh.toy.common.code.Code;
 
-@Entity(name = "file_info")
+@Entity
 @DynamicInsert
 @DynamicUpdate
 public class FileEntity {
@@ -19,19 +19,19 @@ public class FileEntity {
 	@Id
 	@GenericGenerator(name="uuid", strategy = "uuid2")
 	@GeneratedValue(generator = "uuid")
-	private String flIdx;
+	private String fileIdx;
 	private String originFileName;
 	private String renameFileName;
 	private String savePath;
 	private String isDel;
 	Date regDate;
 
-	public String getFlIdx() {
-		return flIdx;
+	public String getFileIdx() {
+		return fileIdx;
 	}
 
-	public void setFlIdx(String flIdx) {
-		this.flIdx = flIdx;
+	public void setFileIdx(String fileIdx) {
+		this.fileIdx = fileIdx;
 	}
 
 	public String getOriginFileName() {
