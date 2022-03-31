@@ -1,10 +1,10 @@
 package com.kh.boot.rent;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,81 +14,69 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.kh.boot.member.Member;
 
+import lombok.Data;
+import lombok.ToString;
+
 @Entity
-@DynamicInsert //insert 쿼리를 생성할 때 값이 null인 필드는 쿼리에서 생략
-@DynamicUpdate //update 쿼리를 생성할 때 변경사항이 없는 필드는 쿼리에서 생략
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Rent implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
+@Data
+@DynamicInsert
+@DynamicUpdate 
+@ToString(exclude = {"rentBooks"})
+public class Rent {
+
 	@Id
 	@GeneratedValue
-	private long rmIdx;
-	private String title; // 대출 건 이름
-	@Column(columnDefinition = "date default sysdate")
-	private Date regDate; 
-	@Column(columnDefinition = "number default 0")
-	private boolean isReturn; //반납여부
+	private Long rmIdx;
+	
+	@Column(columnDefinition = "datetime default now()")
+	private LocalDateTime regDate;
+	@Column(columnDefinition = "int default 0")
+	private Boolean isReturn;
+	private String title;
+	@Column(columnDefinition = "int default 0")
+	private Integer rentBookCnt;
 	
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private Member member;
 	
-	// ToMany관계인 필드의 fetch Type의 default는 lazy이다.
-	// ToOne 관계인 필드의 fetch Type의 default는 EAGER이다.
-	// EAGER : 즉시 로딩
-	@OneToMany(mappedBy = "rent", fetch = FetchType.EAGER)
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	private List<RentBook> rentBooks = new ArrayList<RentBook>(); //ToMany관계일 경우 필드 초기화해두기
+	//수정코드짜다가 문제가 생기면 단방향으로 수정하기
+	//CascadeType
+	// PERSIST : PERSIST를 수행할 때 연관엔티티도 함께 수행
+	// REMOVE : 엔티티를 삭제할 때 연관엔티티도 함께 삭제
+	// MERGE : 준영속상태의 엔티티를 MERGE할 때 연관엔티티도 함께 MERGE
+	// DETACH : 영속상태의 엔티티를 준영속 상태로 만들 때 연관엔티티도 함께 수행
+	// ALL : PERSIST + MERGE + REMOVE + DETACH
 	
-	public long getRmIdx() {
-		return rmIdx;
-	}
-	public void setRmIdx(long rmIdx) {
-		this.rmIdx = rmIdx;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public Date getRegDate() {
-		return regDate;
-	}
-	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
-	}
-	public boolean isReturn() {
-		return isReturn;
-	}
-	public void setReturn(boolean isReturn) {
-		this.isReturn = isReturn;
-	}
-	public Member getMember() {
-		return member;
-	}
-	public void setMember(Member member) {
-		this.member = member;
+	//setter 작성 안함
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "rent", fetch = FetchType.EAGER)
+	private List<RentBook> rentBooks = new ArrayList<RentBook>(); //ToMany 관계일 경우 필드를 초기화 해둘 것
+	
+	public void changeRentBooks(List<RentBook> rentBooks) {
+		this.rentBooks = rentBooks;		
+		for (RentBook rentBook : rentBooks) {
+			rentBook.setRent(this);
+		}
 	}
 	
-	public List<RentBook> getRentBooks() {
-		return rentBooks;
-	}
-	public void setRentBooks(List<RentBook> rentBooks) {
-		this.rentBooks = rentBooks;
-	}
-	@Override
-	public String toString() {
-		return "Rent [rmIdx=" + rmIdx + ", title=" + title + ", regDate=" + regDate + ", isReturn=" + isReturn
-				+ ", member=" + member + ", rentBooks= " + rentBooks+  "]";
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

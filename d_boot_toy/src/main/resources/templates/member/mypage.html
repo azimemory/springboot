@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="fragments :: flg_head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments :: flg_header"></th:block>
+<div class="content">
+
+<h1>마이페이지</h1>
+<table border="1" th:object="${session.authentication}">
+	<tr>
+		<th>아이디</th>
+		<td th:text="*{userId}"></td>
+	</tr>
+	<tr>
+		<th>비밀번호</th>
+		<td th:text="*{password}"></td>
+	</tr>
+	<tr>
+		<th>휴대폰번호</th>
+		<td th:text="*{tell}"></td>
+	</tr>
+	<tr>
+		<th>email</th>
+		<td th:text="*{email}"></td>
+	</tr>
+</table>
+</div>
+<th:block th:replace="fragments :: flg_footer"></th:block>
+
+</body>
+</html>

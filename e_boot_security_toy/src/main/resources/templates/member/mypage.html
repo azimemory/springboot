@@ -5,24 +5,28 @@
 <link rel="stylesheet" href="/css/member.css" />
 </head>
 <body>
-	<header th:replace="fragments :: flg_header"></header>
-	<h1>MyPage</h1>
-	<form th:action="@{/member/modify}" method="post">
-		<table>
-			<tr>
-				<td>id</td>
-				<td th:text="${#authentication.name}"></td>
-			</tr>
-			<tr>
-				<td>tell</td>
-				<td><input type="text" name="tell" th:value="${#authentication.principal.tell}"/></td>
-			</tr>
-			<tr>
-				<td>email</td>
-				<td><input type="text" name="email" th:value="${#authentication.principal.email}"/></td>
-			</tr>
-		</table>
-		<button>수정</button>
-	</form>
+	<th:block th:replace="fragments :: flg_header"></th:block>
+	<div class="content">
+		<h1>MyPage</h1>
+		<form th:action="@{/member/modify}" method="post">
+			<table>
+				<tr>
+					<td>id</td>
+					<td th:text="${#authentication.name}"></td>
+				</tr>
+				<tr>
+					<td>tell</td>
+					<td><input type="text" name="tell" th:value="${#authentication.principal.tell}"/></td>
+				</tr>
+				<tr>
+					<td>email</td>
+					<td><input type="text" name="email" th:value="${#authentication.principal.email}"/></td>
+				</tr>
+			</table>
+			<button>수정</button>
+		</form>
+	</div>
+	
+	<th:block th:replace="fragments :: flg_footer"></th:block>
 </body>
 </html>

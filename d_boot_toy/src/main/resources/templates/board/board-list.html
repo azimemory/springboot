@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="fragments :: flg_head"/>
+<title>Insert title here</title>
+<style type="text/css">
+	.content{
+		width: 70vw;
+		position: relative;
+		left: 15vw;
+		display: flex;
+		flex-direction:column;
+	}
+	
+	.paging{
+		display: flex;
+		justify-content: center;		
+	}
+	
+	.paging>*{
+		margin: 10px 5px 0 5px;
+	}
+	
+	tr,td,th{
+		border: 1px solid black;
+	}
+</style>
+</head>
+<body>
+<th:block th:replace="fragments :: flg_header"></th:block>
+<div class="content">
+	<h2>* 게시판</h2>
+	<table style="text-align: center; " >
+		<thead>
+			<tr>
+				<th style="width: 15%">날짜</th>
+				<th style="width: 75%">제목</th>
+				<th style="width: 10%">작성자</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="board : ${boardList}">
+				<td th:text="${board.regDate}"></td>
+				<td>
+				<a th:text="${board.title}" th:href="@{/board/detail(bdIdx=${board.bdIdx})}"></a>
+				</td>
+				<td th:text="${board.member.userId}"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<!-- pagination section -->
+	<div th:replace="fragments :: paging"></div>	
+	
+	<a type="button" class="btn btn-primary mt-5" href="/board/form">게시글 작성</a>
+	
+</div>
+<th:block th:replace="fragments :: flg_footer"></th:block>
+
+</body>
+</html>

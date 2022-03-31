@@ -1,6 +1,7 @@
 package com.kh.boot.thymeleaf;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class ThymeleafController {
 		member.setGrade("일반");
 		member.setTell("010-0000-1111");
 		member.setLoginCnt(10);
-		member.setRegDate(Date.valueOf("2021-04-09"));
+		member.setRegDate(LocalDateTime.parse("2022-03-30"));
 		
 		Map<String, Object> score = new LinkedHashMap<>();
 		score.put("java",100);

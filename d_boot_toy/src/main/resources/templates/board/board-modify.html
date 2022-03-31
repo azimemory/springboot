@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="fragments :: flg_head"></th:block>
+<link rel="stylesheet" href="/css/board/board.css">
+</head>
+<body>
+<th:block th:replace="fragments :: flg_header"></th:block>
+<div class="content">
+	<h2 class="tit">*게시판</h2>
+	<div class="desc_board">
+		<form action="/board/modify" class="frm_modify" method="post" enctype="multipart/form-data">
+			<div th:object="${board}">
+				<div class="tit_board">
+					제목 :  <input type="text" name="title" class="mt-2" required="required" th:value="*{title}"/><br>
+					작성자 : <span th:text="*{member.userId}"></span><br>
+					파일 :  <input type="file" class="mt-2" name="fileList" id="contract_file" multiple/>
+				</div>
+				<div class='info file_info'>
+					<ol>
+						<li th:each="file : *{files}" 
+							th:object="${file}" 
+							th:onclick="|removeFile(this,*{flIdx})|" >
+							<a>
+								[[*{originFileName}]]  <b>x</b>
+							</a>
+						</li>		
+					</ol>
+				</div>
+				<div class="content_board">
+					<textarea name="content" required="required" th:text="${board.content}"></textarea>
+				</div>
+				<div class="btn_section">
+					<button style="background-color:red; color:white; width:100%">전송</button>
+				</div>
+			</div>
+			<input type="hidden" name="bdIdx" th:value="${board.bdIdx}"/>
+			<input type="hidden" name="writer" th:value="${board.member.userId}"/>
+		</form>
+	</div>
+</div>
+<th:block th:replace="fragments :: flg_footer"></th:block>
+<script type="text/javascript">
+
+let removeFile = (e,flIdx) => {
+	e.style.display = 'none';	
+	let hidden = document.createElement('input');
+	hidden.type='hidden';
+	hidden.name='removeFlIdx';
+	hidden.value= flIdx;
+	console.dir(hidden);
+	console.dir(document.querySelector('form'));
+	document.querySelector('.frm_modify').append(hidden);
+}
+
+
+
+</script>
+</body>
+</html>

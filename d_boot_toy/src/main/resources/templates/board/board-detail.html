@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="fragments :: flg_head"></th:block>
+<link rel="stylesheet" href="/css/board/board.css">
+</head>
+<body>
+<th:block th:replace="fragments :: flg_header"></th:block>
+<div class="content">
+
+	<h2 class='tit'>게시판</h2>
+	<div class='info' th:object="${board}">
+		<span th:text="|번호 : *{bdIdx}|"></span>
+		<span th:text="|제목 : *{title}|"></span>
+		<span th:text="|등록일 : *{regDate}|"></span>
+		<span th:text="|작성자 : *{member.userId}|"></span>
+	</div>
+	<div class='info file_info'>
+		<ol>
+			<li th:each="file : ${board.files}" th:object="${file}">
+				<a th:onclick="downloadFile([[*{originFileName}]],[[*{renameFileName}]],[[*{savePath}]])">
+					[[*{originFileName}]]
+				</a>
+			</li>		
+		</ol>
+	</div>
+	
+	<div class='article_content'>
+		<pre>[[${board.content}]]</pre>
+	</div>
+	
+	<th:block th:if="${session.authentication}">
+		<th:block th:if="${session.authentication.userId == board.member.userId}">
+			<a type="button" class="btn btn-primary mt-3" th:href="@{/board/modify(bdIdx=${board.bdIdx})}">수정</a>
+		</th:block>
+	</th:block>
+	
+</div>
+<th:block th:replace="fragments :: flg_footer"></th:block>
+	<script type="text/javascript">
+		let downloadFile = (ofn,rfn,path) => {
+			let paramObj = {
+					originFileName : ofn,
+					renameFileName : rfn,
+					savePath : path
+			}
+			location.href = '/download?' + urlEncoder(paramObj);
+		}
+	</script>
+
+
+
+
+
+
+</body>
+</html>

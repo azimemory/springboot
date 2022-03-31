@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+html,body{
+	height: 100%;
+}
+
+header{
+	height:10%;
+}
+
+.content{
+	min-height: 90%;
+	padding:5px;
+}
+
+#toy-footer{
+	margin:0 !important;
+	transform:translateY(-100%);
+}

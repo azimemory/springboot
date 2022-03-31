@@ -1,17 +1,17 @@
 package com.kh.bookmanager.member;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 public class MemberRepository {
 	
-	public List<Member> findMemberByRegDate(Date begin, Date end, EntityManager em){
+	public List<Member> findMemberByRegDate(LocalDateTime begin, LocalDateTime end, EntityManager em){
 		String jpql = "select m from Member m where m.regDate between :begin and :end";
 		
-		Query query = em.createQuery(jpql);
+		TypedQuery<Member> query = em.createQuery(jpql,Member.class);
 		query.setParameter("begin", begin);
 		query.setParameter("end", end);
 		
@@ -19,6 +19,6 @@ public class MemberRepository {
 	}
 
 	public List<Member> findAllMember(EntityManager em) {
-		return em.createQuery("from Member").getResultList();
+		return em.createQuery("from Member",Member.class).getResultList();
 	}
 }

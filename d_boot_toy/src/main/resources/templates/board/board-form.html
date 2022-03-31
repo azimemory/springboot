@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="fragments :: flg_head"></th:block>
+<link rel="stylesheet" href="/css/board/board.css">
+</head>
+<body>
+<th:block th:replace="fragments :: flg_header"></th:block>
+<div class="content">
+	<h2 class="tit">*게시판</h2>
+	<div class="desc_board">
+		<form action="/board/upload" method="post" enctype="multipart/form-data">
+			<div>
+				<div class="tit_board">
+					제목 : <input type="text" name="title" required="required"/><br>
+					파일 : <input type="file" name="fileList" id="contract_file" multiple/>
+				</div>
+				<div class="content_board">
+					<textarea name="content" required="required"></textarea>
+				</div>
+				<div class="btn_section">
+					<button style="background-color:red; color:white; width:100%">전송</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<th:block th:replace="fragments :: flg_footer"></th:block>
+</body>
+</html>

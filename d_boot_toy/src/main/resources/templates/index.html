@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="fragments :: flg_head"></th:block>
+<style type="text/css">
+	h1{
+		text-align: center;
+	}
+	
+	.valid-msg{color:red;	font-size:0.5vw;}
+</style>
+</head>
+<body>
+
+<th:block th:replace="fragments :: flg_header"></th:block>
+
+<div class="content">
+	<h1>PCLASS TOY PROJECT</h1>
+	
+	<span class='valid-msg' th:if="${message}" th:text="${message}"></span>
+	
+	<th:block th:if="${session.authentication}">
+		<h2><a href='/member/logout'>logout</a></h2>
+		<h2><a href='/member/mypage'>마이페이지</a></h2>
+	</th:block>
+	<th:block th:unless="${session.authentication}">
+		<h2><a href='/member/login'>login</a></h2>
+		<h2><a href='/member/join'>회원가입</a></h2>
+	</th:block>
+</div>
+
+<th:block th:replace="fragments :: flg_footer"></th:block>
+
+
+
+
+
+
+</body>
+</html>

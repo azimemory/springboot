@@ -2,35 +2,32 @@ package com.kh.bookmanager.rent;
 
 import java.util.List;
 
-import com.kh.bookmanager.book.Book;
-
 public class RentController {
 	
-	RentService rentService = new RentService();
+	private RentService rentService = new RentService();
 	
-	public Rent findRent(long rmIdx){
-		return rentService.findRentById(rmIdx);		
-	}
-	
-	public List<Rent> findRentsOnRent(String userId){
-		return rentService.findRentsOnRent(userId);
-	}
-	
-	public boolean registRent(List<Book> bookList, String userId) {
-		return rentService.insertRent(bookList,userId);
-	}
-	
-	public boolean returnBook(RentBook rentBook) {
-		return rentService.returnRentBook(rentBook);
-	}
-	
-	public Rent addRentBookToRent(long rbIdx,long rmIdx) {
-		return rentService.addRentBookToRent(rmIdx, rbIdx);
+	public boolean registRent(String userId, List<Long> bkIdxs) {
+		return rentService.persistRentInfo(userId, bkIdxs);
 	}
 
-	public List<Rent> findAllRent() {
-		return rentService.findAllRent();
+	public boolean returnBook(Long rbIdx) {
+		return rentService.returnBook(rbIdx);
 	}
+
+	public List<Rent> searchRentList(String userId) {
+		return rentService.findRentByUserId(userId);
+	}
+
+	public boolean extendsRent(long rbIdx) {
+		return rentService.extendsRent(rbIdx);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

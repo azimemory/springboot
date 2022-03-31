@@ -1,130 +1,127 @@
 package com.kh.bookmanager.rent;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.EntityTransaction;
 
 import com.kh.bookmanager.book.Book;
-import com.kh.bookmanager.jpa.JpaUtil;
+import com.kh.bookmanager.jpa.EntityTemplate;
 import com.kh.bookmanager.member.Member;
 
 public class RentService {
 	
 	private RentRepository rentRepository = new RentRepository();
-	
-	public Rent addRentBookToRent(long rmIdx, long rbIdx) {
-		Rent rent = null;
-		EntityManager em = JpaUtil.getEntityManager();
+
+	public boolean persistRentInfo(String userId, List<Long> bkIdxs) {
+		
+		EntityManager em = EntityTemplate.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
 		
 		try {
-			em.getTransaction().begin();
+			Rent rent = new Rent();
 			
-			rent = em.find(Rent.class, rmIdx);
-			RentBook rentBook = em.find(RentBook.class, rbIdx);
-			rentBook.changeRent(rent); //rent가 가지고 있는 rentBooks가 증가
+			//대출건 제목
+			List<Book> books = new ArrayList<>();
+			for (Long bkIdx : bkIdxs) {
+				books.add(em.find(Book.class, bkIdx));
+			}
 			
-			em.getTransaction().commit();
+			String title = books.size() > 1 ? books.get(0).getTitle() + " 외 " + (books.size()-1) + "권"
+							: books.get(0).getTitle();
+			
+			//대출자정보
+			Member member = em.find(Member.class, userId);
+			
+			List<RentBook> rentBooks = new ArrayList<RentBook>();
+			for (Book book : books) {
+				RentBook rentBook = new RentBook();
+				rentBook.setBook(book);
+				rentBook.setState("대출");
+				rentBooks.add(rentBook);
+			}
+			
+			rent.setMember(member);
+			rent.changeRentBooks(rentBooks);
+			rent.setTitle(title);
+			rent.setRentBookCnt(rentBooks.size());
+			em.persist(rent);
+			
+			tx.commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			em.getTransaction().rollback();
+			tx.rollback();
+		} finally {
+			em.close();
+		}
+
+		return false;
+	}
+
+	public boolean returnBook(Long rbIdx) {
+		EntityManager em = EntityTemplate.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		
+		tx.begin();
+		try {
+			RentBook rentBook = em.find(RentBook.class, rbIdx);
+			rentBook.setState("반납");
+			rentBook.setReturnDate(LocalDateTime.now());
+			
+			if(rentBook.getRent().getRentBooks().stream().allMatch(e -> e.getState().equals("반납"))) {
+				rentBook.getRent().setIsReturn(true);
+			}
+			
+			tx.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
 		}finally {
 			em.close();
 		}
-		return rent;
-	}
-	
-	public List<Rent> findAllRent(){
-		List<Rent> rents = null;
-		EntityManager em = JpaUtil.getEntityManager();
 		
+		return false;
+		
+	}
+
+	public List<Rent> findRentByUserId(String userId) {
+		
+		EntityManager em = EntityTemplate.getEntityManager();
+		List<Rent> rents = new ArrayList<Rent>();
 		try {
-			rents = rentRepository.findAllRent(em);
+			rents = rentRepository.findRentByUserId(em, userId);
 		} finally {
 			em.close();
 		}
 		
 		return rents;
 	}
-	
-	public Rent findRentById(long rmIdx) {
-		EntityManager em =  JpaUtil.getEntityManager();
-		Rent rent = null;
+
+	public boolean extendsRent(long rbIdx) {
+		
+		EntityManager em = EntityTemplate.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
 		
 		try {
-			rent = em.find(Rent.class, rmIdx);
-		} finally{
+			
+			RentBook rentBook = em.find(RentBook.class, rbIdx);
+			rentBook.setReturnDate(rentBook.getReturnDate().plusDays(7));
+			tx.commit();
+			return true;
+		} catch (Exception e) {
+			tx.rollback();
+		}finally {
 			em.close();
 		}
-		
-		return rent;
-	}
 
-	public List<Rent> findRentsOnRent(String userId) {
-		
-		List<Rent> rents = null;
-		try(Session session = JpaUtil.createSession()) {
-			rents = rentRepository.findRentsOnRent(userId,session);
-		} 
-		
-		return rents;
+		return false;
 	}
-
-	public boolean insertRent(List<Book> books, String userId) {
-		Transaction tx = null;
-		boolean res = false;
-		
-		try(Session session = JpaUtil.createSession()) {
-			tx = session.getTransaction();
-			tx.begin();
-			
-			Rent rent = new Rent();
-			Member memberEntity = session.get(Member.class, userId);
-			
-			String title = books.size() > 1
-					? books.get(0).getTitle() + " 외 " + (books.size()-1) + "권"
-					: books.get(0).getTitle();
-			
-			Rent rentEntity = new Rent();
-			rentEntity.setMember(memberEntity);
-			rentEntity.setTitle(title);
-			
-			for (Book book : books) {
-				RentBook rentBook = new RentBook();
-				rentBook.setBook(book);
-				rentBook.changeRent(rentEntity);
-				session.save(rentBook);
-			}
-			tx.commit();
-			res = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		}
-		
-		return res;
-	}
-
-	public boolean returnRentBook(RentBook rentBook) {
-		boolean res = false;
-		Transaction tx = null;
-		
-		try (Session session = JpaUtil.createSession()){
-			tx = session.getTransaction();
-			tx.begin();
-			session.update(rentBook);
-			tx.commit();
-			res = true;
-		} catch (Exception e) {
-			tx.rollback();
-		}
-		
-		return res;
-	}
-	
 	
 	
 	

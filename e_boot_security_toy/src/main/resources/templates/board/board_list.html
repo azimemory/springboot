@@ -15,7 +15,7 @@
 </style>
 </head>
 <body>
-	<header th:replace="fragments :: flg_header"></header>
+	<th:block th:replace="fragments :: flg_header"></th:block>
 	<div class="content">
 	    <h2 class="tit">* 게시판</h2>
 	    <a th:href="@{/board/form}">게시글 쓰기</a>
@@ -35,19 +35,8 @@
 	           </tr>
 	       </tbody>
 	    </table>
-	    <!-- section pagination -->
-	      <div class="paging">
-	         <a th:href="@{|/${paging.type}/list|}" class="nav first">《</a>
-	         <a th:href="@{|/${paging.type}/list?page=${paging.prev}|}">〈</i></a>
-	       
-         	<a th:each="block : ${#numbers.sequence(paging.blockStart,paging.blockEnd)}" 
-         		th:href="@{|/${paging.type}/list?page=${block}|}">
-         		<span th:text="${block}"></span></a>
-	        
-	         <a th:href="@{|/${paging.type}/list?page=${paging.next}|}">〉</a>
-	 	   	 <a th:href="@{|/${paging.type}/list?page=${paging.lastPage}|}">》</a>
-	   	  </div>
-	   	  <!-- // section pagination -->
+	   <!-- pagination section -->
+		<div th:replace="fragments :: paging"></div>	
 	</div>
 </body>
 </html>

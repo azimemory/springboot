@@ -2,30 +2,33 @@ package com.kh.toy.common.code;
 
 public enum ErrorCode {
 	
-	UNAUTHORIZED_PAGE("접근 권한이 없는 페이지 입니다."),
-	EXPIRATION_AUTH("이미 만료된 인증입니다."),
-
-	NON_EXIST("존재하지 않는 정보입니다."),
-	
 	DATABASE_ACCESS_ERROR("데이터베이스와 통신 중 에러가 발생하였습니다."),
-	FILE_ACCESS_ERROR("파일 작업 중 에러가 발생하였습니다."),
-	MAIL_SENDING_ERROR("이메일 발송 중 에러가 발생하였습니다."),
-
-	HTTP_ERROR("HTTP 통신 중 에러가 발생하였습니다."),
-	CODE_500("서버에서 에러가 발생하였습니다."),
-	CODE_404("존재하지 않는 경로입니다.");
-
-	public String msg;
-	public String url = "/";
+	VALIDATOR_FAIL_ERROR("부적절한 양식의 데이터 입니다."),
+	MAIL_SEND_FAIL_ERROR("이메일 발송 중 에러가 발생하였습니다."),
+	HTTP_CONNECT_ERROR("HTTP 통신 중 에러가 발생하였습니다."),
+	AUTHENTICATION_FAILED_ERROR("유효하지 않은 인증입니다."),
+	UNAUTHORIZED_PAGE_ERROR("접근 권한이 없는 페이지 입니다."),
+	FAILED_FILE_UPLOAD_ERROR("파일업로드에 실패하였습니다."),
+	REDIRECT("");
 	
-	//에러 발생 시 index로 이동
-	ErrorCode(String errMsg){
-		this.msg = errMsg;
+	public final String MESSAGE;
+	public String URL;
+	
+	private ErrorCode(String msg) {
+		this.MESSAGE = msg;
+		this.URL = "/";
 	}
 	
-	//에러 발생 시 지정한 페이지로 이동
-	ErrorCode(String msg,String url){
-		this.msg = msg;
-		this.url = url;
+	private ErrorCode(String msg, String url) {
+		this.MESSAGE = msg;
+		this.URL = url;
 	}
+
+	public ErrorCode setURL(String uRL) {
+		URL = uRL;
+		return this;
+	}
+	
+	
+
 }

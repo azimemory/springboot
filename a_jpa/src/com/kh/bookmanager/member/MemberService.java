@@ -1,12 +1,12 @@
 package com.kh.bookmanager.member;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import com.kh.bookmanager.jpa.JpaUtil;
+import com.kh.bookmanager.jpa.EntityTemplate;
 
 public class MemberService {
 	
@@ -15,7 +15,7 @@ public class MemberService {
 	public List<Member> findAllMember(){
 		
 		List<Member> members = null;
-		EntityManager em = JpaUtil.getEntityManager();
+		EntityManager em = EntityTemplate.getEntityManager();
 		
 		try {
 			members = memberRepository.findAllMember(em);
@@ -26,9 +26,9 @@ public class MemberService {
 		return members;
 	}
 	
-	public List<Member> findMemberByRegDate(Date begin, Date end){
+	public List<Member> findMemberByRegDate(LocalDateTime begin, LocalDateTime end){
 		List<Member> members = null;
-		EntityManager em =  JpaUtil.getEntityManager();
+		EntityManager em =  EntityTemplate.getEntityManager();
 		
 		try {
 			members = memberRepository.findMemberByRegDate(begin, end, em);
@@ -41,7 +41,7 @@ public class MemberService {
 	
 	public boolean deleteMember(String userId) {
 		boolean res =false;
-		EntityManager em = JpaUtil.getEntityManager();
+		EntityManager em = EntityTemplate.getEntityManager();
 		
 		try {
 			em.getTransaction().begin();
@@ -63,7 +63,7 @@ public class MemberService {
 	
 	public boolean modifyMember(Member member) {
 		boolean res = false;
-		EntityManager em = JpaUtil.getEntityManager();
+		EntityManager em = EntityTemplate.getEntityManager();
 		
 		try {
 			em.getTransaction().begin();
@@ -84,7 +84,7 @@ public class MemberService {
 	}
 	
 	public Member findMemberById(String userId) {
-		EntityManager em = JpaUtil.getEntityManager();
+		EntityManager em = EntityTemplate.getEntityManager();
 		
 		Member member = null;
 		//읽기 작업은 트랜잭션을 명시적으로 열지 않아도 괜찮다.
@@ -99,7 +99,7 @@ public class MemberService {
 	
 	public boolean persistMember(Member member) {
 		boolean res = false;
-		EntityManager em = JpaUtil.getEntityManager();
+		EntityManager em = EntityTemplate.getEntityManager();
 		
 		//읽기 작업을 제외한 모든 작업은 반드시 트랜잭션 안에서 수행되어야 한다. 
 		EntityTransaction tx = em.getTransaction();

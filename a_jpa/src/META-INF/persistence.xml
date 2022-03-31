@@ -6,9 +6,9 @@
       <class>com.kh.bookmanager.rent.RentBook</class>
       <class>com.kh.bookmanager.book.Book</class>
       <properties>
-         <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
-         <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-         <property name="javax.persistence.jdbc.user" value="jpa"/>
+         <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/toy?user=root"/>
+         <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+         <property name="javax.persistence.jdbc.user" value="root"/>
          <property name="javax.persistence.jdbc.password" value="1234"/>
          
          <!-- create : 테이블이 없으면 생성, 변경된 점 반영 

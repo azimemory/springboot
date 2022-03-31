@@ -1,15 +1,44 @@
 package com.kh.bookmanager.book;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 public class BookRepository {
 
-	public Book findBookByTitle(Session session, String title) {
-		Query<Book> query = session.createQuery("select b from Book b "
-				+ "where b.title like '%'||:title||'%'",Book.class);
+	public List<Book> findBookByTitle(EntityManager em, String keyword) {
 		
-		query.setParameter("title", title);
-		return query.getSingleResult();
+		List<Book> books = em.createQuery("select b from Book b "
+				+ "	where b.title like concat('%',:keyword,'%')",Book.class)
+				.setParameter("keyword", keyword)
+				.getResultList();
+		
+		return books;
 	}
+
+	public List<Book> searchAllBooks(EntityManager em) {
+		return em.createQuery("from Book",Book.class).getResultList();
+	}
+
+	
+	public List<Book> findBookWithRank(EntityManager em) {
+		return em.createQuery("select b from Book b order by b.rentCnt desc",Book.class)
+				.setMaxResults(3)
+				.getResultList();
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

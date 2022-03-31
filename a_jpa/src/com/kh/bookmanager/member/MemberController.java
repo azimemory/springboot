@@ -1,6 +1,6 @@
 package com.kh.bookmanager.member;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberController {
@@ -16,7 +16,7 @@ public class MemberController {
 	}
 	
 	public List<Member> searchByRegDate(String begin, String end){
-		return memberService.findMemberByRegDate(Date.valueOf(begin), Date.valueOf(end));
+		return memberService.findMemberByRegDate(LocalDateTime.parse(begin), LocalDateTime.parse(end));
 	}
 	
 	public boolean join(Member member) {

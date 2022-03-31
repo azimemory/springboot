@@ -1,11 +1,11 @@
 package com.kh.toy.member;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-@Repository
-public interface MemberRepository  extends JpaRepository<Member, String>{
-	Member findByUserIdAndIsLeave(String userId, boolean isLeave);
-	boolean existsByEmail(String email);
-	boolean existsByTell(String tell);
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.kh.toy.entity.Member;
+
+public interface MemberRepository extends JpaRepository<Member, String>{
+	Optional<Member> findByUserIdAndIsLeave(String userId, boolean isLeave);
 }
